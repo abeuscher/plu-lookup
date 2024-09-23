@@ -28,15 +28,15 @@ const ProductSearch = () => {
 
   const commands = ['clear', 'reset']; // Define command keywords
 
-// Initialize Fuse.js
-const fuse = new Fuse(products, {
-  keys: ['item'],
-  threshold: 0.2,
-  tokenize: true,
-  matchAllTokens: true,
-  includeScore: true,
-  shouldSort: true,
-});
+  // Initialize Fuse.js
+  const fuse = new Fuse(products, {
+    keys: ['item'],
+    threshold: 0.2,        // Lower threshold for stricter matching
+    tokenize: true,        // Break the search text and items into tokens
+    matchAllTokens: true,  // All tokens in the query must be present
+    includeScore: true,    // Include score in the result
+    shouldSort: true,      // Sort results by score
+  });
 
   // Initialize Speech Recognition
   useEffect(() => {
@@ -81,6 +81,7 @@ const fuse = new Fuse(products, {
       };
     } else {
       console.warn('Speech Recognition not supported in this browser.');
+      setIsSpeechRecognitionSupported(false);
     }
 
     // Cleanup on component unmount
@@ -94,22 +95,23 @@ const fuse = new Fuse(products, {
   const handleSearch = (e) => {
     const value = e.target.value;
     setQuery(value);
-  
+
     if (value.trim().length > 0) {
       const fuseResults = fuse.search(value);
-  
+
       const maxScore = 0.3;
       const filteredResults = fuseResults
         .filter((result) => result.score <= maxScore)
         .map((result) => result.item);
-  
+
       setResults(filteredResults);
-  
+
       if (filteredResults.length === 1) {
         const product = filteredResults[0];
         const formattedPLU = formatPLUForSpeech(product.plu);
         speakText(`${formattedPLU}`);
       }
+      // Do not speak if multiple or no matches
     } else {
       setResults([]);
     }
@@ -132,7 +134,6 @@ const fuse = new Fuse(products, {
       case 'reset':
         setQuery('');
         setResults([]);
-        // Removed: speakText('Search cleared.');
         break;
       default:
         break;
@@ -195,15 +196,20 @@ const fuse = new Fuse(products, {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              {isSpeechRecognitionSupported && (
+              {isSpeechRecognitionSupported ? (
                 <IconButton onClick={handleMicClick} aria-label="voice search">
                   {isListening ? <MicOff color="primary" /> : <Mic />}
                 </IconButton>
-              )}
+              ) : null}
             </InputAdornment>
           ),
         }}
       />
+      {!isSpeechRecognitionSupported && (
+        <Typography variant="body2" color="error">
+          Voice input is not supported on this device.
+        </Typography>
+      )}
       {results.length > 0 && (
         <List>
           {results.map((product, index) => (
