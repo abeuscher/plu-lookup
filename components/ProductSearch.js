@@ -28,11 +28,15 @@ const ProductSearch = () => {
 
   const commands = ['clear', 'reset']; // Define command keywords
 
-  // Initialize Fuse.js
-  const fuse = new Fuse(products, {
-    keys: ['item'],
-    threshold: 0.4, // Adjust as needed
-  });
+// Initialize Fuse.js
+const fuse = new Fuse(products, {
+  keys: ['item'],
+  threshold: 0.2,
+  tokenize: true,
+  matchAllTokens: true,
+  includeScore: true,
+  shouldSort: true,
+});
 
   // Initialize Speech Recognition
   useEffect(() => {
@@ -90,18 +94,22 @@ const ProductSearch = () => {
   const handleSearch = (e) => {
     const value = e.target.value;
     setQuery(value);
-
+  
     if (value.trim().length > 0) {
       const fuseResults = fuse.search(value);
-      const matchedResults = fuseResults.map((result) => result.item);
-      setResults(matchedResults);
-
-      if (matchedResults.length === 1) {
-        const product = matchedResults[0];
+  
+      const maxScore = 0.3;
+      const filteredResults = fuseResults
+        .filter((result) => result.score <= maxScore)
+        .map((result) => result.item);
+  
+      setResults(filteredResults);
+  
+      if (filteredResults.length === 1) {
+        const product = filteredResults[0];
         const formattedPLU = formatPLUForSpeech(product.plu);
         speakText(`${formattedPLU}`);
       }
-      // Do not speak if multiple or no matches
     } else {
       setResults([]);
     }
