@@ -99,7 +99,7 @@ const ProductSearch = () => {
       if (matchedResults.length === 1) {
         const product = matchedResults[0];
         const formattedPLU = formatPLUForSpeech(product.plu);
-        speakText(`The PLU code for ${product.item} is ${formattedPLU}`);
+        speakText(`${formattedPLU}`);
       }
       // Do not speak if multiple or no matches
     } else {
