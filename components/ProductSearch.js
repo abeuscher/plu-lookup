@@ -40,12 +40,30 @@ const ProductSearch = () => {
 
   // Initialize Speech Recognition
   useEffect(() => {
-    const SpeechRecognition =
-      typeof window !== 'undefined' &&
-      (window.SpeechRecognition || window.webkitSpeechRecognition);
+    const isSpeechRecognitionAvailable = () => {
+      const SpeechRecognition =
+        typeof window !== 'undefined' &&
+        (window.SpeechRecognition || window.webkitSpeechRecognition);
 
-    if (SpeechRecognition) {
-      setIsSpeechRecognitionSupported(true);
+      // Create a dummy instance to test for support
+      try {
+        if (SpeechRecognition) {
+          const recognitionTest = new SpeechRecognition();
+          return true;
+        }
+      } catch (e) {
+        return false;
+      }
+      return false;
+    };
+
+    const support = isSpeechRecognitionAvailable();
+    setIsSpeechRecognitionSupported(support);
+
+    if (support) {
+      // Initialize Speech Recognition
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
 
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = true; // Keep listening continuously
@@ -81,7 +99,6 @@ const ProductSearch = () => {
       };
     } else {
       console.warn('Speech Recognition not supported in this browser.');
-      setIsSpeechRecognitionSupported(false);
     }
 
     // Cleanup on component unmount
