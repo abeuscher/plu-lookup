@@ -3,6 +3,8 @@
 'use client';
 
 import {
+  AppBar,
+  Button,
   Container,
   IconButton,
   InputAdornment,
@@ -10,9 +12,10 @@ import {
   ListItem,
   ListItemText,
   TextField,
+  Toolbar,
   Typography,
 } from '@mui/material';
-import { Mic, MicOff } from '@mui/icons-material';
+import { Mic, MicOff, Save } from '@mui/icons-material';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Fuse from 'fuse.js';
@@ -24,15 +27,15 @@ const ProductSearch = () => {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isSpeechRecognitionSupported, setIsSpeechRecognitionSupported] = useState(false);
+  const [isAudioResponseEnabled, setIsAudioResponseEnabled] = useState(true);
   const recognitionRef = useRef(null);
 
-  const commands = ['clear', 'reset']; // Define command keywords
+  const commands = ['clear', 'reset'];
 
-  // Initialize Fuse.js
   const fuseOptions = {
     includeScore: true,
     shouldSort: true,
-    threshold: 0.4, // Slightly higher to be more inclusive
+    threshold: 0.4,
     keys: [
       { name: 'fullname', weight: 0.5 },
       { name: 'spoken_variety', weight: 0.4 },
@@ -42,18 +45,15 @@ const ProductSearch = () => {
       { name: 'plu', weight: 0.1 },
     ],
   };
-  
-  
+
   const fuse = new Fuse(products, fuseOptions);
 
-  // Initialize Speech Recognition
   useEffect(() => {
     const isSpeechRecognitionAvailable = () => {
       const SpeechRecognition =
         typeof window !== 'undefined' &&
         (window.SpeechRecognition || window.webkitSpeechRecognition);
 
-      // Create a dummy instance to test for support
       try {
         if (SpeechRecognition) {
           const recognitionTest = new SpeechRecognition();
@@ -69,18 +69,16 @@ const ProductSearch = () => {
     setIsSpeechRecognitionSupported(support);
 
     if (support) {
-      // Initialize Speech Recognition
       const SpeechRecognition =
         window.SpeechRecognition || window.webkitSpeechRecognition;
 
       recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = true; // Keep listening continuously
-      recognitionRef.current.interimResults = false; // Get final results only
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = false;
       recognitionRef.current.lang = 'en-US';
 
       recognitionRef.current.onresult = (event) => {
         if (isSpeaking) {
-          // Ignore results if the app is speaking
           return;
         }
 
@@ -109,7 +107,6 @@ const ProductSearch = () => {
       console.warn('Speech Recognition not supported in this browser.');
     }
 
-    // Cleanup on component unmount
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
@@ -118,38 +115,38 @@ const ProductSearch = () => {
   }, [isListening, isSpeaking]);
 
   const handleSearch = (e) => {
-  const value = e.target.value;
-  setQuery(value);
+    const value = e.target.value;
+    setQuery(value);
 
-  if (value.trim().length > 0) {
-    let filteredResults = [];
+    if (value.trim().length > 0) {
+      let filteredResults = [];
 
-    if (/^\d+$/.test(value.trim())) {
-      // If the query is all digits, search by PLU directly
-      filteredResults = products.filter((product) =>
-        product.plu.includes(value.trim())
-      );
+      if (/^\d+$/.test(value.trim())) {
+        filteredResults = products.filter((product) =>
+          product.plu.includes(value.trim())
+        );
+      } else {
+        const fuseResults = fuse.search(value);
+
+        const maxScore = 0.3;
+        filteredResults = fuseResults
+          .filter((result) => result.score <= maxScore)
+          .map((result) => result.item);
+      }
+
+      setResults(filteredResults);
+
+      if (filteredResults.length === 1) {
+        const product = filteredResults[0];
+        const formattedPLU = formatPLUForSpeech(product.plu);
+        if (isAudioResponseEnabled) {
+          speakText(`${formattedPLU}`);
+        }
+      }
     } else {
-      const fuseResults = fuse.search(value);
-
-      const maxScore = 0.3; // Adjust as needed
-      filteredResults = fuseResults
-        .filter((result) => result.score <= maxScore)
-        .map((result) => result.item);
+      setResults([]);
     }
-
-    setResults(filteredResults);
-
-    if (filteredResults.length === 1) {
-      const product = filteredResults[0];
-      const formattedPLU = formatPLUForSpeech(product.plu);
-      //speakText(`${formattedPLU}`);
-    }
-    // Do not speak if multiple or no matches
-  } else {
-    setResults([]);
-  }
-};
+  };
 
   const handleMicClick = () => {
     if (isListening) {
@@ -161,7 +158,6 @@ const ProductSearch = () => {
     }
   };
 
-  // Function to handle voice commands
   const handleVoiceCommand = (command) => {
     switch (command) {
       case 'clear':
@@ -174,36 +170,27 @@ const ProductSearch = () => {
     }
   };
 
-  // Function to format PLU codes for speech
   const formatPLUForSpeech = (plu) => {
-    // Split on '/' to handle multiple PLUs
     const pluCodes = plu.split('/');
-    // For each code, insert spaces between digits
     const formattedCodes = pluCodes.map((code) => code.split('').join(' '));
-    // Join codes with ' and '
     return formattedCodes.join(' and ');
   };
 
-  // Function to speak text using Speech Synthesis
   const speakText = (text) => {
     if ('speechSynthesis' in window) {
       const synth = window.speechSynthesis;
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-US';
 
-      // Set isSpeaking to true
       setIsSpeaking(true);
 
-      // Stop recognition while speaking
       if (recognitionRef.current && isListening) {
         recognitionRef.current.stop();
       }
 
       utterance.onend = () => {
-        // Set isSpeaking to false
         setIsSpeaking(false);
 
-        // Restart recognition if still listening
         if (recognitionRef.current && isListening) {
           recognitionRef.current.start();
         }
@@ -215,48 +202,62 @@ const ProductSearch = () => {
     }
   };
 
+  const toggleAudioResponse = () => {
+    setIsAudioResponseEnabled(!isAudioResponseEnabled);
+  };
+
   return (
-    <Container maxWidth="sm" style={{ marginTop: '2rem' }}>
-      <Typography variant="h4" align="center" gutterBottom>
-        Product PLU Lookup
-      </Typography>
-      <TextField
-        fullWidth
-        label="Search for a product..."
-        variant="outlined"
-        value={query}
-        onChange={handleSearch}
-        margin="normal"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              {isSpeechRecognitionSupported ? (
-                <IconButton onClick={handleMicClick} aria-label="voice search">
-                  {isListening ? <MicOff color="primary" /> : <Mic />}
-                </IconButton>
-              ) : null}
-            </InputAdornment>
-          ),
-        }}
-      />
-      {!isSpeechRecognitionSupported && (
-        <Typography variant="body2" color="error">
-          Voice input is not supported on this device.
-        </Typography>
-      )}
-      {results.length > 0 && (
-        <List>
-          {results.map((product, index) => (
-            <ListItem key={index}>
-              <ListItemText
-                primary={product.fullname.toLowerCase()}
-                secondary={`PLU: ${product.plu}`}
-              />
-            </ListItem>
-          ))}
-        </List>
-      )}
-    </Container>
+    <>
+      <AppBar position="static" color="secondary">
+        <Toolbar>
+          <Typography variant="h6" style={{ flexGrow: 1 }}>
+          Product PLU Lookup
+          </Typography>
+          <Button color="inherit" onClick={toggleAudioResponse} startIcon={<Save />}>
+            {isAudioResponseEnabled ? 'Disable Audio Response' : 'Enable Audio Response'}
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      <Container maxWidth="sm" style={{ marginTop: '2rem' }}>
+        <TextField
+          fullWidth
+          label="Search for a product..."
+          variant="outlined"
+          value={query}
+          onChange={handleSearch}
+          margin="normal"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                {isSpeechRecognitionSupported ? (
+                  <IconButton onClick={handleMicClick} aria-label="voice search">
+                    {isListening ? <MicOff color="primary" /> : <Mic />}
+                  </IconButton>
+                ) : null}
+              </InputAdornment>
+            ),
+          }}
+        />
+        {!isSpeechRecognitionSupported && (
+          <Typography variant="body2" color="error">
+            Voice input is not supported on this device.
+          </Typography>
+        )}
+        {results.length > 0 && (
+          <List>
+            {results.map((product, index) => (
+              <ListItem key={index}>
+                <ListItemText
+                  primary={product.fullname.toLowerCase()}
+                  secondary={`PLU: ${product.plu}`}
+                />
+              </ListItem>
+            ))}
+          </List>
+        )}
+      </Container>
+    </>
   );
 };
 
