@@ -29,14 +29,22 @@ const ProductSearch = () => {
   const commands = ['clear', 'reset']; // Define command keywords
 
   // Initialize Fuse.js
-  const fuse = new Fuse(products, {
-    keys: ['item'],
-    threshold: 0.2,        // Lower threshold for stricter matching
-    tokenize: true,        // Break the search text and items into tokens
-    matchAllTokens: true,  // All tokens in the query must be present
-    includeScore: true,    // Include score in the result
-    shouldSort: true,      // Sort results by score
-  });
+  const fuseOptions = {
+    includeScore: true,
+    shouldSort: true,
+    threshold: 0.4, // Slightly higher to be more inclusive
+    keys: [
+      { name: 'fullname', weight: 0.5 },
+      { name: 'spoken_variety', weight: 0.4 },
+      { name: 'commodity', weight: 0.3 },
+      { name: 'variety', weight: 0.2 },
+      { name: 'category', weight: 0.1 },
+      { name: 'plu', weight: 0.1 },
+    ],
+  };
+  
+  
+  const fuse = new Fuse(products, fuseOptions);
 
   // Initialize Speech Recognition
   useEffect(() => {
@@ -110,29 +118,38 @@ const ProductSearch = () => {
   }, [isListening, isSpeaking]);
 
   const handleSearch = (e) => {
-    const value = e.target.value;
-    setQuery(value);
+  const value = e.target.value;
+  setQuery(value);
 
-    if (value.trim().length > 0) {
+  if (value.trim().length > 0) {
+    let filteredResults = [];
+
+    if (/^\d+$/.test(value.trim())) {
+      // If the query is all digits, search by PLU directly
+      filteredResults = products.filter((product) =>
+        product.plu.includes(value.trim())
+      );
+    } else {
       const fuseResults = fuse.search(value);
 
-      const maxScore = 0.3;
-      const filteredResults = fuseResults
+      const maxScore = 0.3; // Adjust as needed
+      filteredResults = fuseResults
         .filter((result) => result.score <= maxScore)
         .map((result) => result.item);
-
-      setResults(filteredResults);
-
-      if (filteredResults.length === 1) {
-        const product = filteredResults[0];
-        const formattedPLU = formatPLUForSpeech(product.plu);
-        speakText(`${formattedPLU}`);
-      }
-      // Do not speak if multiple or no matches
-    } else {
-      setResults([]);
     }
-  };
+
+    setResults(filteredResults);
+
+    if (filteredResults.length === 1) {
+      const product = filteredResults[0];
+      const formattedPLU = formatPLUForSpeech(product.plu);
+      //speakText(`${formattedPLU}`);
+    }
+    // Do not speak if multiple or no matches
+  } else {
+    setResults([]);
+  }
+};
 
   const handleMicClick = () => {
     if (isListening) {
@@ -232,7 +249,7 @@ const ProductSearch = () => {
           {results.map((product, index) => (
             <ListItem key={index}>
               <ListItemText
-                primary={product.item}
+                primary={product.fullname.toLowerCase()}
                 secondary={`PLU: ${product.plu}`}
               />
             </ListItem>
