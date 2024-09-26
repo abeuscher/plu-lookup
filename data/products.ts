@@ -1,4 +1,4 @@
-// data/products.js
+// data/products.ts
 
 export const products = [
     {"id":1,"plu":"3000","type":"Global","category":"Fruits","variety":"Alkmene","commodity":"APPLES","size":"All Sizes","botanical":"Malus domestica","growtype":"any","spoken_variety":"Alkmene","fullname":"Alkmene APPLES"},

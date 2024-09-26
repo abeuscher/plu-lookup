@@ -1,14 +1,14 @@
-// pages/index.js
-
+import HomePage from '../components/HomePage';
 import NavigationBar from '../components/NavigationBar';
-import ProductSearch from '../components/ProductSearch';
 import React from 'react';
 
 const Home = () => {
-  return <div>
-    <NavigationBar />
-    <ProductSearch />
-    </div>;
+  return (
+    <div>
+      <NavigationBar />
+      <HomePage />
+    </div>
+  );
 };
 
 export default Home;

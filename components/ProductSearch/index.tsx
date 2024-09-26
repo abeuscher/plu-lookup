@@ -1,5 +1,3 @@
-// components/ProductSearch.js
-
 'use client';
 
 import {
@@ -19,16 +17,26 @@ import { Mic, MicOff, Save } from '@mui/icons-material';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Fuse from 'fuse.js';
-import { products } from '../data/products';
+import { products } from '../../data/products';
 
-const ProductSearch = () => {
+interface Product {
+  plu: string;
+  fullname: string;
+  spoken_variety: string;
+  commodity: string;
+  variety: string;
+  category: string;
+}
+
+const ProductSearch: React.FC = () => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Product[]>([]);
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isSpeechRecognitionSupported, setIsSpeechRecognitionSupported] = useState(false);
+  const [isSpeechRecognitionSupported, setIsSpeechRecognitionSupported] =
+    useState(false);
   const [isAudioResponseEnabled, setIsAudioResponseEnabled] = useState(true);
-  const recognitionRef = useRef(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   const commands = ['clear', 'reset'];
 
@@ -49,20 +57,19 @@ const ProductSearch = () => {
   const fuse = new Fuse(products, fuseOptions);
 
   useEffect(() => {
-    const isSpeechRecognitionAvailable = () => {
+    const isSpeechRecognitionAvailable = (): boolean => {
+      if (typeof window === 'undefined') return false;
+
       const SpeechRecognition =
-        typeof window !== 'undefined' &&
-        (window.SpeechRecognition || window.webkitSpeechRecognition);
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return false;
 
       try {
-        if (SpeechRecognition) {
-          const recognitionTest = new SpeechRecognition();
-          return true;
-        }
+        new SpeechRecognition();
+        return true;
       } catch (e) {
         return false;
       }
-      return false;
     };
 
     const support = isSpeechRecognitionAvailable();
@@ -71,36 +78,39 @@ const ProductSearch = () => {
     if (support) {
       const SpeechRecognition =
         window.SpeechRecognition || window.webkitSpeechRecognition;
-
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = false;
       recognitionRef.current.lang = 'en-US';
 
-      recognitionRef.current.onresult = (event) => {
-        if (isSpeaking) {
-          return;
-        }
+      recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+        if (isSpeaking) return;
 
-        const speechResult = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+        const speechResult = event.results[
+          event.results.length - 1
+        ][0].transcript
+          .toLowerCase()
+          .trim();
         console.log('Speech recognition result:', speechResult);
 
         if (commands.includes(speechResult)) {
           handleVoiceCommand(speechResult);
         } else {
           setQuery(speechResult);
-          handleSearch({ target: { value: speechResult } });
+          handleSearch({
+            target: { value: speechResult },
+          } as React.ChangeEvent<HTMLInputElement>);
         }
       };
 
-      recognitionRef.current.onerror = (event) => {
+      recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error('Speech recognition error:', event.error);
         setIsListening(false);
       };
 
       recognitionRef.current.onend = () => {
         if (isListening && !isSpeaking) {
-          recognitionRef.current.start();
+          recognitionRef.current?.start();
         }
       };
     } else {
@@ -108,18 +118,16 @@ const ProductSearch = () => {
     }
 
     return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
+      recognitionRef.current?.stop();
     };
   }, [isListening, isSpeaking]);
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
 
     if (value.trim().length > 0) {
-      let filteredResults = [];
+      let filteredResults: Product[] = [];
 
       if (/^\d+$/.test(value.trim())) {
         filteredResults = products.filter((product) =>
@@ -130,7 +138,9 @@ const ProductSearch = () => {
 
         const maxScore = 0.3;
         filteredResults = fuseResults
-          .filter((result) => result.score <= maxScore)
+          .filter(
+            (result) => result.score !== undefined && result.score <= maxScore
+          )
           .map((result) => result.item);
       }
 
@@ -150,15 +160,15 @@ const ProductSearch = () => {
 
   const handleMicClick = () => {
     if (isListening) {
-      recognitionRef.current.stop();
+      recognitionRef.current?.stop();
       setIsListening(false);
     } else {
-      recognitionRef.current.start();
+      recognitionRef.current?.start();
       setIsListening(true);
     }
   };
 
-  const handleVoiceCommand = (command) => {
+  const handleVoiceCommand = (command: string) => {
     switch (command) {
       case 'clear':
       case 'reset':
@@ -170,13 +180,13 @@ const ProductSearch = () => {
     }
   };
 
-  const formatPLUForSpeech = (plu) => {
+  const formatPLUForSpeech = (plu: string): string => {
     const pluCodes = plu.split('/');
     const formattedCodes = pluCodes.map((code) => code.split('').join(' '));
     return formattedCodes.join(' and ');
   };
 
-  const speakText = (text) => {
+  const speakText = (text: string) => {
     if ('speechSynthesis' in window) {
       const synth = window.speechSynthesis;
       const utterance = new SpeechSynthesisUtterance(text);
@@ -211,10 +221,16 @@ const ProductSearch = () => {
       <AppBar position="static" color="secondary">
         <Toolbar>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
-          Product PLU Lookup
+            Product PLU Lookup
           </Typography>
-          <Button color="inherit" onClick={toggleAudioResponse} startIcon={<Save />}>
-            {isAudioResponseEnabled ? 'Disable Audio Response' : 'Enable Audio Response'}
+          <Button
+            color="inherit"
+            onClick={toggleAudioResponse}
+            startIcon={<Save />}
+          >
+            {isAudioResponseEnabled
+              ? 'Disable Audio Response'
+              : 'Enable Audio Response'}
           </Button>
         </Toolbar>
       </AppBar>
@@ -231,7 +247,10 @@ const ProductSearch = () => {
             endAdornment: (
               <InputAdornment position="end">
                 {isSpeechRecognitionSupported ? (
-                  <IconButton onClick={handleMicClick} aria-label="voice search">
+                  <IconButton
+                    onClick={handleMicClick}
+                    aria-label="voice search"
+                  >
                     {isListening ? <MicOff color="primary" /> : <Mic />}
                   </IconButton>
                 ) : null}

@@ -1,11 +1,11 @@
 'use client';
 
-import FlashcardGame from '../../components/FlashcardGame';
 import NavigationBar from '../../components/NavigationBar';
+import ProductSearch from '../../components/ProductSearch';
 import React from 'react';
 import { useAuthCheck } from '../../utils/authCheck';
 
-const FlashcardPage = () => {
+const VoiceLookup = () => {
   const { isAuthenticated } = useAuthCheck();
 
   if (!isAuthenticated) {
@@ -15,9 +15,9 @@ const FlashcardPage = () => {
   return (
     <div>
       <NavigationBar />
-      <FlashcardGame />
+      <ProductSearch />
     </div>
   );
 };
 
-export default FlashcardPage;
+export default VoiceLookup;

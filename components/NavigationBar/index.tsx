@@ -9,6 +9,7 @@ import {
   IconButton,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
   Toolbar,
   Typography,
@@ -33,7 +34,8 @@ function NavigationBar() {
   };
 
   const menuItems = [
-    { text: 'Voice Lookup', href: '/' },
+    { text: 'Login', href: '/' },
+    { text: 'Voice Lookup', href: '/voice-lookup' },
     { text: 'Flashcard Game', href: '/flashcard' },
   ];
 
@@ -41,15 +43,15 @@ function NavigationBar() {
     <div>
       <List>
         {menuItems.map((item) => (
-          <ListItem
-            button
-            key={item.text}
-            component={Link}
-            href={item.href}
-            onClick={() => setMobileOpen(false)}
-            selected={currentPath === item.href}
-          >
-            <ListItemText primary={item.text} />
+          <ListItem key={item.text} disablePadding>
+            <ListItemButton
+              component={Link}
+              href={item.href}
+              selected={currentPath === item.href}
+              onClick={() => setMobileOpen(false)}
+            >
+              <ListItemText primary={item.text} />
+            </ListItemButton>
           </ListItem>
         ))}
       </List>
