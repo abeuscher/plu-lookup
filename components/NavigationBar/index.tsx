@@ -34,7 +34,7 @@ function NavigationBar() {
   };
 
   const menuItems = [
-    { text: 'Login', href: '/' },
+    { text: 'Home', href: '/' },
     { text: 'Voice Lookup', href: '/voice-lookup' },
     { text: 'Flashcard Game', href: '/flashcard' },
   ];
@@ -73,10 +73,11 @@ function NavigationBar() {
               <MenuIcon />
             </IconButton>
           </Hidden>
-
+          <Icon color="inherit" style={{ width: '2em', height: '2em' }}>
+            {<ShoppingCart style={{ width: '2em', height: '2em' }} />}
+          </Icon>
           {/* Site Title */}
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            <Icon color="inherit">{<ShoppingCart />}</Icon>
+          <Typography variant="h3" color="white" style={{ flexGrow: 1 }}>
             PLU Madness
           </Typography>
 

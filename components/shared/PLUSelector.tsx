@@ -83,7 +83,7 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
         <Tooltip title="Reset Selections">
           <Button
             onClick={handleResetSelections}
-            color="primary"
+            color="warning"
             startIcon={<Clear />}
           >
             Reset Form

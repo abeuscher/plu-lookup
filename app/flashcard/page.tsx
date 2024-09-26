@@ -1,8 +1,6 @@
 'use client';
 
 import FlashcardGame from '../../components/FlashcardGame';
-import NavigationBar from '../../components/NavigationBar';
-import React from 'react';
 import { useAuthCheck } from '../../utils/authCheck';
 
 const FlashcardPage = () => {
@@ -14,7 +12,6 @@ const FlashcardPage = () => {
 
   return (
     <div>
-      <NavigationBar />
       <FlashcardGame />
     </div>
   );

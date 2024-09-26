@@ -11,7 +11,7 @@ export interface GameState {
   currentRound: number;
   score: number;
   gameItems: Product[];
-  finalScore: number;
+  finalScore?: number;
 }
 
 export interface PlayerState {

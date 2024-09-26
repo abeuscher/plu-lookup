@@ -4,7 +4,6 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import { AppBar } from '../shared/AppBar';
-import GameInfoBlock from './GameInfoBlock';
 import GameOver from './GameOver';
 import Round1 from './GameRounds/Round1';
 import Round2 from './GameRounds/Round2';
@@ -91,19 +90,17 @@ const FlashcardGame: React.FC = () => {
   };
 
   if (!isReady) {
-    return null; // or a loading spinner
+    return null;
   }
 
   return (
-    <div>
-      <AppBar title={`Flashcard Game - Round ${gameState.currentRound}`} />
-      <Container maxWidth="md">
-        <Box my={2}>
-          <GameInfoBlock gameState={gameState} />
-        </Box>
-        {renderCurrentStage()}
-      </Container>
-    </div>
+    <>
+      <AppBar
+        title={`Flashcard Game - Round ${gameState.currentRound}`}
+        gameState={gameState}
+      />
+      <Container>{renderCurrentStage()}</Container>
+    </>
   );
 };
 
