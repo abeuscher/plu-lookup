@@ -25,7 +25,10 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
         Flashcard Game Setup
       </Typography>
       <PlayerInfo />
-      <PLUSelector onSelectionChange={setSelectedPLUs} />
+      <PLUSelector
+        onSelectionChange={setSelectedPLUs}
+        selectedPLUs={selectedPLUs}
+      />
       <Button
         variant="contained"
         color="primary"

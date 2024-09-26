@@ -9,6 +9,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  SelectChangeEvent,
   TextField,
   Typography,
 } from '@mui/material';
@@ -36,9 +37,7 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const handleGroupSelection = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
+  const handleGroupSelection = (event: SelectChangeEvent<string>) => {
     const groupName = event.target.value as string;
     setSelectedGroup(groupName);
 
