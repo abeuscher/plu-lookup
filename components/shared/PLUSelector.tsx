@@ -45,7 +45,6 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [showCheckedOnly, setShowCheckedOnly] = useState(false);
   const [sortOrder, setSortOrder] = useState('plu');
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const handlePLUToggle = (plu: string) => {
     const newSelectedPLUs = selectedPLUs.includes(plu)
@@ -76,10 +75,8 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
     .map(normalizeProduct)
     .filter(
       (product) =>
-        (product.fullname
-          .toLowerCase()
-          .includes(debouncedSearchTerm.toLowerCase()) ||
-          product.plu.includes(debouncedSearchTerm)) &&
+        (product.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.plu.includes(searchTerm)) &&
         (!showCheckedOnly || selectedPLUs.includes(product.plu))
     );
 
