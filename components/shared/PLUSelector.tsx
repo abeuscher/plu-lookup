@@ -1,25 +1,41 @@
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   Switch,
   TextField,
   Toolbar,
   Tooltip,
   Typography,
 } from '@mui/material';
+import { Clear, ExpandMore } from '@mui/icons-material';
 import React, { useState } from 'react';
 
-import { Clear } from '@mui/icons-material';
 import { products } from '../../data/products';
 import { useDebounce } from '../../hooks/useDebounce';
+
+interface Product {
+  plu: string;
+  fullname: string;
+  category: string;
+}
 
 interface PLUSelectorProps {
   selectedPLUs: string[];
   onSelectionChange: (selectedPLUs: string[]) => void;
 }
+
+const capitalizeText = (text: string) =>
+  text.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
 
 const PLUSelector: React.FC<PLUSelectorProps> = ({
   selectedPLUs,
@@ -27,6 +43,7 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showCheckedOnly, setShowCheckedOnly] = useState(false);
+  const [sortOrder, setSortOrder] = useState('plu');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const handlePLUToggle = (plu: string) => {
@@ -44,13 +61,48 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
     setShowCheckedOnly(!showCheckedOnly);
   };
 
-  const filteredProducts = products.filter(
-    (product) =>
-      (product.fullname
-        .toLowerCase()
-        .includes(debouncedSearchTerm.toLowerCase()) ||
-        product.plu.includes(debouncedSearchTerm)) &&
-      (!showCheckedOnly || selectedPLUs.includes(product.plu))
+  const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSortOrder(event.target.value as string);
+  };
+
+  const normalizeProduct = (product: Product) => ({
+    ...product,
+    fullname: capitalizeText(product.fullname),
+    category: capitalizeText(product.category),
+  });
+
+  const filteredProducts = products
+    .map(normalizeProduct)
+    .filter(
+      (product) =>
+        (product.fullname
+          .toLowerCase()
+          .includes(debouncedSearchTerm.toLowerCase()) ||
+          product.plu.includes(debouncedSearchTerm)) &&
+        (!showCheckedOnly || selectedPLUs.includes(product.plu))
+    );
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortOrder === 'plu') {
+      return a.plu.localeCompare(b.plu);
+    } else if (sortOrder === 'fullname') {
+      return a.fullname.localeCompare(b.fullname);
+    } else if (sortOrder === 'category') {
+      return a.category.localeCompare(b.category);
+    } else {
+      return 0;
+    }
+  });
+
+  const productsByCategory = sortedProducts.reduce(
+    (acc, product) => {
+      if (!acc[product.category]) {
+        acc[product.category] = [];
+      }
+      acc[product.category].push(product);
+      return acc;
+    },
+    {} as { [category: string]: Product[] }
   );
 
   return (
@@ -74,10 +126,24 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
             }
             label="Show Checked Only"
           />
+          <FormControl
+            variant="outlined"
+            size="small"
+            style={{ marginLeft: '16px' }}
+          >
+            <InputLabel>Sort By</InputLabel>
+            <Select
+              value={sortOrder}
+              onChange={handleSortChange}
+              label="Sort By"
+            >
+              <MenuItem value="plu">PLU</MenuItem>
+              <MenuItem value="fullname">Name</MenuItem>
+              <MenuItem value="category">Category</MenuItem>
+            </Select>
+          </FormControl>
           <Typography variant="body2" style={{ marginLeft: '16px' }}>
-            {selectedPLUs
-              ? `${selectedPLUs.length} selected items`
-              : '0 selected items'}
+            {selectedPLUs.length} selected items
           </Typography>
         </Box>
         <Tooltip title="Reset Selections">
@@ -90,23 +156,30 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
           </Button>
         </Tooltip>
       </Toolbar>
-      <Grid container spacing={2}>
-        {filteredProducts.map((product) => (
-          <Grid item xs={6} sm={4} md={3} key={product.plu}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={
-                    selectedPLUs ? selectedPLUs.includes(product.plu) : false
-                  }
-                  onChange={() => handlePLUToggle(product.plu)}
-                />
-              }
-              label={`${product.plu} - ${product.fullname}`}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      {Object.keys(productsByCategory).map((category) => (
+        <Accordion key={category} defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Typography variant="h6">{category}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid container spacing={2}>
+              {productsByCategory[category].map((product) => (
+                <Grid item xs={12} sm={6} md={4} key={product.plu}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={selectedPLUs.includes(product.plu)}
+                        onChange={() => handlePLUToggle(product.plu)}
+                      />
+                    }
+                    label={`${product.plu} - ${product.fullname}`}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
+      ))}
     </div>
   );
 };
