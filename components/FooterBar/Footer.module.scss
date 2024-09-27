@@ -20,95 +20,14 @@
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
-
+  text-transform: uppercase;
+  font-size: 0.75rem;
   &:hover {
-    color: #f0a500; /* Accent color on hover */
+    text-decoration: underline;
   }
 }
-
-.footerContent {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-  margin-top: 20px;
-
-  @media (min-width: 600px) {
-    flex-direction: row;
-    text-align: left;
-  }
-}
-
-.titleBlock {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  .textBlock {
-    display: flex;
-  }
-  @media (min-width: 600px) {
-    margin-bottom: 0;
-  }
-}
-
-.cartIcon {
-  margin-right: 10px;
-  padding: 4px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  width: 1.5em;
-  height: 1.5em;
-  svg {
-    width: 1.5em;
-    height: 1.5em;
-  }
-}
-
-.mailingAddress {
-  margin-top: 10px;
-}
-
-.contactBlock {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  @media (min-width: 600px) {
-    align-items: flex-end;
-  }
-}
-
-.contactItem {
-  display: flex;
-  align-items: center;
-  margin-top: 8px;
-
-  &:first-of-type {
-    margin-top: 0;
-  }
-}
-
-.icon,
-.locationIcon {
-  margin-right: 8px;
-  font-size: 1.25rem;
-  padding: 6px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  overflow: visible !important;
-}
-
-.locationIcon {
-  font-size: 2.5rem;
-  margin: 0 3px 0 0;
-}
-
 .copyright {
   text-align: center;
   margin-top: 20px;
+  font-size: 0.75rem;
 }

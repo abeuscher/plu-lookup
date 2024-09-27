@@ -149,7 +149,7 @@ const ProductSearch: React.FC = () => {
       if (filteredResults.length === 1) {
         const product = filteredResults[0];
         const formattedPLU = formatPLUForSpeech(product.plu);
-        if (isAudioResponseEnabled) {
+        if (isAudioResponseEnabled && isSpeechRecognitionSupported) {
           speakText(`${formattedPLU}`);
         }
       }

@@ -12,6 +12,7 @@ import { Email, LocationOn, Phone, ShoppingCart } from '@mui/icons-material';
 
 import Link from 'next/link';
 import React from 'react';
+import { menuItems } from '../../data/nav';
 import styles from './Footer.module.scss'; // Importing styles from component stylesheet
 
 const footerData = {
@@ -23,11 +24,7 @@ const footerData = {
     { label: 'Main Office', number: '+1234567890' },
     { label: 'Support', number: '+0987654321' },
   ],
-  menuItems: [
-    { text: 'Home', href: '/' },
-    { text: 'Voice Lookup', href: '/voice-lookup' },
-    { text: 'Flashcard Game', href: '/flashcard' },
-  ],
+  menuItems: menuItems,
 };
 
 function FooterBar() {
@@ -60,62 +57,9 @@ function FooterBar() {
           </div>
         </Toolbar>
 
-        <div className={styles.footerContent}>
-          <div className={styles.titleBlock}>
-            <div className={styles.textBlock}>
-              <Icon className={styles.cartIcon}>
-                <ShoppingCart />
-              </Icon>
-              <Typography variant="h4" color="inherit">
-                {footerData.title}
-              </Typography>
-            </div>
-            <div className={styles.textBlock}>
-              <Icon className={styles.locationIcon}>
-                <LocationOn />
-              </Icon>
-              <Typography
-                variant="body1"
-                color="inherit"
-                className={styles.mailingAddress}
-              >
-                {footerData.mailingAddress}
-              </Typography>
-            </div>
-          </div>
-
-          <div className={styles.contactBlock}>
-            <div className={styles.contactItem}>
-              <Icon color="inherit" className={styles.icon}>
-                <Email />
-              </Icon>
-              <Typography variant="body1" color="inherit">
-                <Link href={`mailto:${footerData.contactEmail}`} passHref>
-                  {footerData.contactEmail}
-                </Link>
-              </Typography>
-            </div>
-
-            {footerData.phoneNumbers.map((phone) => (
-              <div className={styles.contactItem} key={phone.number}>
-                <Icon color="inherit" className={styles.icon}>
-                  <Phone />
-                </Icon>
-                <Typography variant="body1" color="inherit">
-                  {phone.label}:{' '}
-                  <a href={`tel:${phone.number}`}>{phone.number}</a>
-                </Typography>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Copyright Section */}
         <div className={styles.copyright}>
-          <Typography variant="body1" color="inherit">
-            © {footerData.copyrightYear} {footerData.title}. All Rights
-            Reserved.
-          </Typography>
+          © {footerData.copyrightYear} {footerData.title}. All Rights Reserved.
         </div>
       </Container>
     </AppBar>

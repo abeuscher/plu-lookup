@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import React from 'react';
 import { ShoppingCart } from '@mui/icons-material';
+import { menuItems } from '../../data/nav';
 
 function NavigationBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -32,13 +33,6 @@ function NavigationBar() {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  const menuItems = [
-    { text: 'Home', href: '/' },
-    { text: 'Voice Lookup', href: '/voice-lookup' },
-    { text: 'Exporter', href: '/exporter' },
-    { text: 'Flashcard Game', href: '/flashcard' },
-  ];
 
   const drawer = (
     <div>
@@ -74,13 +68,23 @@ function NavigationBar() {
               <MenuIcon />
             </IconButton>
           </Hidden>
-          <Icon color="inherit" style={{ width: '2em', height: '2em' }}>
-            {<ShoppingCart style={{ width: '2em', height: '2em' }} />}
-          </Icon>
-          {/* Site Title */}
-          <Typography variant="h3" color="white" style={{ flexGrow: 1 }}>
-            PLU Madness
-          </Typography>
+          <Link
+            href="/"
+            style={{
+              display: 'flex',
+              textDecoration: 'none',
+              alignItems: 'center',
+              flexGrow: 1,
+            }}
+          >
+            <Icon color="inherit" style={{ width: '2em', height: '2em' }}>
+              {<ShoppingCart style={{ width: '2em', height: '2em' }} />}
+            </Icon>
+            {/* Site Title */}
+            <Typography variant="h5" color="white">
+              PLU Madness
+            </Typography>
+          </Link>
 
           {/* Desktop Navigation */}
           <Hidden mdDown>
