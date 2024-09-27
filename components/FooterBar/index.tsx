@@ -1,14 +1,6 @@
 'use client'; // This line is a comment and will be removed by the CLI
 
-import {
-  AppBar,
-  Container,
-  Icon,
-  List,
-  Toolbar,
-  Typography,
-} from '@mui/material';
-import { Email, LocationOn, Phone, ShoppingCart } from '@mui/icons-material';
+import { AppBar, Container, Toolbar } from '@mui/material';
 
 import Link from 'next/link';
 import React from 'react';
