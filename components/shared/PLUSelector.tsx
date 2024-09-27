@@ -11,6 +11,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Switch,
   TextField,
   Toolbar,
@@ -61,7 +62,7 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
     setShowCheckedOnly(!showCheckedOnly);
   };
 
-  const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSortChange = (event: SelectChangeEvent<string>) => {
     setSortOrder(event.target.value as string);
   };
 
