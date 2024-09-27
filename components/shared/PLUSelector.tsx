@@ -7,7 +7,7 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  Grid,
+  Grid2 as Grid,
   InputLabel,
   MenuItem,
   Select,
@@ -157,30 +157,41 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
           </Button>
         </Tooltip>
       </Toolbar>
-      {Object.keys(productsByCategory).map((category) => (
-        <Accordion key={category} defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography variant="h6">{category}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Grid container spacing={2}>
-              {productsByCategory[category].map((product) => (
-                <Grid item xs={12} sm={6} md={4} key={product.plu}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={selectedPLUs.includes(product.plu)}
-                        onChange={() => handlePLUToggle(product.plu)}
+      <Box>
+        {Object.keys(productsByCategory).map((category) => (
+          <Grid key={category} container>
+            <Accordion key={category} defaultExpanded>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                <Typography variant="h6">{category}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container spacing={2}>
+                  {productsByCategory[category].map((product) => (
+                    <Grid
+                      key={product.plu}
+                      size={{ xs: 12, sm: 6, md: 4, lg: 2 }}
+                    >
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={selectedPLUs.includes(product.plu)}
+                            onChange={() => handlePLUToggle(product.plu)}
+                          />
+                        }
+                        label={
+                          <Typography variant="body2">
+                            {product.plu} - {product.fullname}
+                          </Typography>
+                        }
                       />
-                    }
-                    label={`${product.plu} - ${product.fullname}`}
-                  />
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
-      ))}
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
+        ))}
+      </Box>
     </div>
   );
 };

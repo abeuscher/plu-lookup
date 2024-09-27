@@ -65,51 +65,28 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="md">
+    <Container>
       {/* Hero Section */}
       <Box
         sx={{
           position: 'relative',
-          height: '300px',
-          backgroundImage: 'url("https://via.placeholder.com/1200x300")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          borderRadius: 2,
-          mb: 4,
-          color: 'white',
+          zIndex: 1,
+          p: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          height: '100%',
         }}
       >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            borderRadius: 2,
-          }}
-        />
-        <Box
-          sx={{
-            position: 'relative',
-            zIndex: 1,
-            p: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            height: '100%',
-          }}
-        >
-          {/* Headline */}
-          <Typography variant="h3" component="h1" gutterBottom>
-            Welcome to the PLU Manager
-          </Typography>
-          {/* Blurb */}
-          <Typography variant="h6">
-            Select the set of PLUs you'd like to work with, memorize, or export.
-          </Typography>
-        </Box>
+        {/* Headline */}
+        <Typography variant="h3" component="h1" gutterBottom>
+          PLU Configurator
+        </Typography>
+        {/* Blurb */}
+        <Typography variant="h6">
+          Select the set of PLUs you'd like to work with, memorize, or export.
+          The dropdown has a list of presets which we are working to grow.
+        </Typography>
       </Box>
 
       {!isSetupComplete ? (
