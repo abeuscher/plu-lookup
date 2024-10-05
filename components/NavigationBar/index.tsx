@@ -2,7 +2,6 @@
 
 import {
   AppBar,
-  Button,
   Drawer,
   Hidden,
   Icon,
@@ -20,15 +19,36 @@ import { Menu as MenuIcon } from '@mui/icons-material';
 import React from 'react';
 import { ShoppingCart } from '@mui/icons-material';
 import { menuItems } from '../../data/nav';
+import { usePathname } from 'next/navigation';
 
+function isActiveLink(currentPath, itemHref) {
+  // Ensure both paths start with a slash
+  const normalizedCurrentPath = currentPath.startsWith('/')
+    ? currentPath
+    : `/${currentPath}`;
+  const normalizedItemHref = itemHref.startsWith('/')
+    ? itemHref
+    : `/${itemHref}`;
+
+  // Remove trailing slashes, if any
+  const trimmedCurrentPath = normalizedCurrentPath.replace(/\/$/, '');
+  const trimmedItemHref = normalizedItemHref.replace(/\/$/, '');
+
+  // Compare the trimmed paths
+  return trimmedCurrentPath === trimmedItemHref;
+}
 function NavigationBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [currentPath, setCurrentPath] = React.useState('');
-
+  const pathname = usePathname();
   React.useEffect(() => {
-    // This code runs only on the client side
-    setCurrentPath(window.location.pathname);
-  }, []);
+    const handleRouteChange = () => {
+      setCurrentPath(pathname);
+    };
+
+    // Set initial path
+    handleRouteChange();
+  }, [pathname]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -42,7 +62,8 @@ function NavigationBar() {
             <ListItemButton
               component={Link}
               href={item.href}
-              selected={currentPath === item.href}
+              aria-label={item.text}
+              selected={isActiveLink(currentPath, item.href)}
               onClick={() => setMobileOpen(false)}
             >
               <ListItemText primary={item.text} />
@@ -63,13 +84,14 @@ function NavigationBar() {
               color="inherit"
               edge="start"
               onClick={handleDrawerToggle}
-              aria-label="menu"
+              aria-label="open menu" // Add aria-label for accessibility
             >
               <MenuIcon />
             </IconButton>
           </Hidden>
           <Link
             href="/"
+            aria-label="home"
             style={{
               display: 'flex',
               textDecoration: 'none',
@@ -89,17 +111,33 @@ function NavigationBar() {
           {/* Desktop Navigation */}
           <Hidden mdDown>
             {menuItems.map((item) => (
-              <Button
+              <Link
                 key={item.text}
-                color="inherit"
-                component={Link}
                 href={item.href}
-                style={{
-                  fontWeight: currentPath === item.href ? 'bold' : 'normal',
-                }}
+                aria-label={item.text}
+                style={{ textDecoration: 'none' }} // Remove default link styles
+                passHref
               >
-                {item.text}
-              </Button>
+                <Typography
+                  component="span"
+                  className={
+                    isActiveLink(currentPath, item.href) ? 'active-link' : ''
+                  }
+                  sx={{
+                    display: 'inline-block',
+                    padding: '6px 16px',
+                    backgroundColor: 'transparent',
+                    color: 'inherit',
+                    border: '1px solid transparent', // Add a border to mimic button if needed
+                    cursor: 'pointer',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    },
+                  }}
+                >
+                  {item.text}
+                </Typography>
+              </Link>
             ))}
           </Hidden>
         </Toolbar>
