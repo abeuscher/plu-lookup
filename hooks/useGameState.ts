@@ -8,7 +8,12 @@ export const useGameState = () => {
   const [currentRound, setCurrentRound] = useState(0);
   const [score, setScore] = useState(0);
   const [gameItems, setGameItems] = useState<Product[]>([]);
-  const [Round1Data, setRound1Data] = useState<number[]>([]);
+  const [Round1Data, setRound1Data] = useState<    {
+    text: string;
+    guessedPLU: string;
+    correctPLU: string;
+    isCorrect: boolean;
+  }[]>([]);
   const [Round2Data, setRound2Data] = useState<number[]>([]);
   const [Round3Data, setRound3Data] = useState<number[]>([]);
 
@@ -28,7 +33,7 @@ export const useGameState = () => {
     }
   }, [gameItems]);
 
-  const handleRound1Data = useCallback((data: number[]) => {
+  const handleRound1Data = useCallback((data: any) => {
     setRound1Data(data);
   }, []);
 

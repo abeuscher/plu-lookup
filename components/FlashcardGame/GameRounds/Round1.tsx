@@ -8,11 +8,15 @@ import { useState } from 'react';
 
 interface Round1Props {
   onAnswer: (isCorrect: boolean) => void;
-  onRound1Data: (data: number[]) => void;
+  onRound1Data: any;
   gameItems: Product[];
 }
 
-const Round1: React.FC<Round1Props> = ({ onAnswer, gameItems }) => {
+const Round1: React.FC<Round1Props> = ({
+  onAnswer,
+  gameItems,
+  onRound1Data,
+}) => {
   const [pastGuesses, setPastGuesses] = useState<
     {
       text: string;
