@@ -1,25 +1,11 @@
-# Welcome to Next.js
+# PLU Madness
 
-This is the most minimal starter for your Next.js project.
+This is a small nextJS app that takes all of the PLU numbers, allows the end user to select a subset of them, then export them, or play a flashcard game with them.
 
-## Deploy your own
+This is still under development.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/hello-world&project-name=hello-world&repository-name=hello-world)
+## Demo
 
-## How to use
+[https://plumadness.com/](https://plumadness.com/)
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-```bash
-npx create-next-app --example hello-world hello-world-app
-```
-
-```bash
-yarn create next-app --example hello-world hello-world-app
-```
-
-```bash
-pnpm create next-app --example hello-world hello-world-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+Questions? email [alexbeuscher@gmail.com](mailto:alexbeuscher@gmail.com)
