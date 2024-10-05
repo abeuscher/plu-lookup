@@ -55,8 +55,9 @@ const ProductSearch: React.FC = () => {
   };
 
   const fuse = new Fuse(products, fuseOptions);
-
   useEffect(() => {
+    if (recognitionRef.current) return; // Prevent re-initialization
+
     const isSpeechRecognitionAvailable = (): boolean => {
       if (typeof window === 'undefined') return false;
 
@@ -105,10 +106,11 @@ const ProductSearch: React.FC = () => {
 
       recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error('Speech recognition error:', event.error);
-        setIsListening(false);
+        // Optionally, handle the error or set isListening to false
       };
 
       recognitionRef.current.onend = () => {
+        console.log('Speech recognition ended');
         if (isListening && !isSpeaking) {
           recognitionRef.current?.start();
         }
@@ -120,7 +122,7 @@ const ProductSearch: React.FC = () => {
     return () => {
       recognitionRef.current?.stop();
     };
-  }, [isListening, isSpeaking]);
+  }, []); // Empty dependency array
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

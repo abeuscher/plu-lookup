@@ -1,9 +1,9 @@
 'use client';
 
 import { Button, Container, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
 
 import { Product } from '../../../types/';
+import { useState } from 'react';
 
 interface Round3Props {
   onSubmit: (answers: Record<string, string>) => void;

@@ -1,0 +1,58 @@
+import { fireEvent, render, screen } from '@testing-library/react';
+
+import FlashcardGame from '../FlashcardGame';
+import { defaultGroups } from '../../data/products';
+import { useGameState } from '../../hooks/useGameState';
+import { usePlayerState } from '../../hooks/usePlayerState';
+
+// Mock the hooks used in FlashcardGame
+jest.mock('../../hooks/useGameState');
+jest.mock('../../hooks/usePlayerState');
+
+describe('FlashcardGame Round Advancement', () => {
+  const mockAdvanceRound = jest.fn();
+  const mockGameState = {
+    currentRound: 0,
+    score: 0,
+    gameItems: defaultGroups[0].values,
+  };
+
+  const mockPlayerState = {
+    playerName: 'Bruce',
+    selectedPLUs: defaultGroups[0].values,
+  };
+
+  beforeEach(() => {
+    (useGameState as jest.Mock).mockReturnValue({
+      ...mockGameState,
+      advanceRound: mockAdvanceRound,
+    });
+
+    (usePlayerState as jest.Mock).mockReturnValue(mockPlayerState);
+  });
+
+  it('should start the game and advance to round 2 when round 1 is completed', () => {
+    render(<FlashcardGame />);
+
+    // Simulate starting the game
+    fireEvent.click(screen.getByText(/start game/i));
+
+    // Simulate finishing round 1
+    fireEvent.click(screen.getByText(/next round/i));
+
+    // Check if the advanceRound function was called
+    expect(mockAdvanceRound).toHaveBeenCalled();
+  });
+
+  it('should end the game after round 3', () => {
+    // Set the current round to 3 in the mocked game state
+    mockGameState.currentRound = 3;
+    render(<FlashcardGame />);
+
+    // Simulate finishing round 3
+    fireEvent.click(screen.getByText(/next round/i));
+
+    // Check if the advanceRound function was called (which should end the game)
+    expect(mockAdvanceRound).toHaveBeenCalled();
+  });
+});

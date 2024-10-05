@@ -1,7 +1,6 @@
 import { Button, Container, Grid, Typography } from '@mui/material';
 
 import { Product } from '../../../types';
-import React from 'react';
 
 interface Round2Props {
   onAnswer: (isCorrect: boolean) => void;

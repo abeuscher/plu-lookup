@@ -1,24 +1,25 @@
 'use client';
 
-import { Box, Button, Container, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Button, Container, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 import { AppBar } from '../shared/AppBar';
 import GameOver from './GameOver';
+import Link from 'next/link';
+import Round0 from './GameRounds/Round0';
 import Round1 from './GameRounds/Round1';
 import Round2 from './GameRounds/Round2';
 import Round3 from './GameRounds/Round3';
 import { useGameState } from '../../hooks/useGameState';
 import { usePlayerState } from '../../hooks/usePlayerState';
-import { useRouter } from 'next/navigation';
 
 const FlashcardGame: React.FC = () => {
-  const router = useRouter();
   const { playerName, selectedPLUs } = usePlayerState();
   const {
     gameState,
     startGame,
     handleAnswer,
+    handleRound1Data,
     advanceRound,
     calculateFinalScore,
     resetGame,
@@ -26,12 +27,10 @@ const FlashcardGame: React.FC = () => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (!playerName || selectedPLUs.length === 0) {
-      router.push('/');
-    } else {
+    if (playerName && selectedPLUs.length > 0) {
       setIsReady(true);
     }
-  }, [playerName, selectedPLUs, router]);
+  }, [playerName, selectedPLUs]);
 
   const handleStartGame = () => {
     startGame(selectedPLUs);
@@ -51,25 +50,19 @@ const FlashcardGame: React.FC = () => {
     switch (gameState.currentRound) {
       case 0:
         return (
-          <Container maxWidth="sm">
-            <Typography variant="h5" gutterBottom>
-              Ready to start, {playerName}?
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              You've selected {selectedPLUs.length} PLUs to be quizzed on.
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleStartGame}
-            >
-              Start Game
-            </Button>
-          </Container>
+          <Round0
+            playerName={playerName}
+            gameItems={gameState.gameItems}
+            onStartGame={handleStartGame}
+          />
         );
       case 1:
         return (
-          <Round1 onAnswer={handleAnswer} gameItems={gameState.gameItems} />
+          <Round1
+            onAnswer={handleAnswer}
+            gameItems={gameState.gameItems}
+            onRound1Data={handleRound1Data}
+          />
         );
       case 2:
         return (
@@ -90,7 +83,19 @@ const FlashcardGame: React.FC = () => {
   };
 
   if (!isReady) {
-    return null;
+    return (
+      <div>
+        <AppBar title="Flashcard Game" gameState={gameState} />
+        <Container>
+          <Link href="/">
+            <Typography variant="h5" gutterBottom>
+              Please select your name and at least one PLU to start the game on
+              the home page.
+            </Typography>
+          </Link>
+        </Container>
+      </div>
+    );
   }
 
   return (
