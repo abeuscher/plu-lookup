@@ -1,78 +1,67 @@
-'use client';
-
-import { Button, Container, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Container, Typography } from '@mui/material';
 
 import { AppBar } from '../shared/AppBar';
 import GameOver from './GameOver';
 import Link from 'next/link';
+import React from 'react';
 import Round0 from './GameRounds/Round0';
 import Round1 from './GameRounds/Round1';
 import Round2 from './GameRounds/Round2';
 import Round3 from './GameRounds/Round3';
+import { Turn } from '../../types';
 import { useGameState } from '../../hooks/useGameState';
 import { usePlayerState } from '../../hooks/usePlayerState';
 
 const FlashcardGame: React.FC = () => {
   const { playerName, selectedPLUs } = usePlayerState();
-  const {
-    gameState,
-    startGame,
-    handleAnswer,
-    handleRound1Data,
-    advanceRound,
-    calculateFinalScore,
-    resetGame,
-  } = useGameState();
-  const [isReady, setIsReady] = useState(false);
+  const { gameState, startGame, handleAnswer, calculateFinalScore, resetGame } =
+    useGameState();
 
-  useEffect(() => {
-    if (playerName && selectedPLUs.length > 0) {
-      setIsReady(true);
-    }
-  }, [playerName, selectedPLUs]);
+  const onAnswer = (turn: Turn) => {
+    const completeTurn: Turn = {
+      ...turn,
+      round: gameState.currentRound,
+      isCorrect: turn.playerGuess === turn.correctAnswer,
+    };
+    handleAnswer(completeTurn);
+  };
 
-  const handleStartGame = () => {
-    startGame(selectedPLUs);
+  const handleRestartGame = () => {
+    resetGame();
+    // Not calling startGame() here, so it resets to Round 0
   };
 
   const renderCurrentStage = () => {
-    if (
-      gameState.gameItems.length === 0 &&
-      gameState.currentRound !== 0 &&
-      gameState.currentRound !== 4
-    ) {
-      // If we've run out of items, move to the next round
-      advanceRound();
-      return null;
-    }
-
     switch (gameState.currentRound) {
       case 0:
         return (
           <Round0
             playerName={playerName}
-            gameItems={gameState.gameItems}
-            onStartGame={handleStartGame}
+            selectedPLUs={selectedPLUs}
+            onStartGame={startGame}
           />
         );
       case 1:
         return (
           <Round1
-            onAnswer={handleAnswer}
-            gameItems={gameState.gameItems}
-            onRound1Data={handleRound1Data}
+            onAnswer={onAnswer}
+            gameItems={gameState.hydratedGameItems}
+            currentItemIndex={gameState.currentItemIndex}
           />
         );
       case 2:
         return (
-          <Round2 onAnswer={handleAnswer} gameItems={gameState.gameItems} />
+          <Round2
+            onAnswer={onAnswer}
+            gameItems={gameState.hydratedGameItems}
+            currentItemIndex={gameState.currentItemIndex}
+          />
         );
       case 3:
         return (
           <Round3
             onSubmit={calculateFinalScore}
-            gameItems={gameState.gameItems}
+            gameItems={gameState.hydratedGameItems}
           />
         );
       case 4:
@@ -82,10 +71,14 @@ const FlashcardGame: React.FC = () => {
     }
   };
 
-  if (!isReady) {
+  if (!playerName || selectedPLUs.length === 0) {
     return (
       <div>
-        <AppBar title="Flashcard Game" gameState={gameState} />
+        <AppBar
+          title="Flashcard Game"
+          gameState={gameState}
+          onRestartGame={handleRestartGame}
+        />
         <Container>
           <Link href="/">
             <Typography variant="h5" gutterBottom>
@@ -103,6 +96,7 @@ const FlashcardGame: React.FC = () => {
       <AppBar
         title={`Flashcard Game - Round ${gameState.currentRound}`}
         gameState={gameState}
+        onRestartGame={handleRestartGame}
       />
       <Container>{renderCurrentStage()}</Container>
     </>

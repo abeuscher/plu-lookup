@@ -1,68 +1,45 @@
-'use client';
-
 import { Button, Container, Grid, Typography } from '@mui/material';
 
-import { Product } from '../../../types';
-import styles from './Round1.module.scss';
-import { useState } from 'react';
+import { RoundProps } from '../../../types';
 
-interface Round1Props {
-  onAnswer: (isCorrect: boolean) => void;
-  onRound1Data: any;
-  gameItems: Product[];
-}
-
-const Round1: React.FC<Round1Props> = ({
+const Round1: React.FC<RoundProps> = ({
   onAnswer,
   gameItems,
-  onRound1Data,
+  currentItemIndex,
 }) => {
-  const [pastGuesses, setPastGuesses] = useState<
-    {
-      text: string;
-      guessedPLU: string;
-      correctPLU: string;
-      isCorrect: boolean;
-    }[]
-  >([]);
+  if (
+    !gameItems ||
+    gameItems.length === 0 ||
+    currentItemIndex >= gameItems.length
+  ) {
+    return (
+      <Container>
+        <Typography>No items available for Round 1</Typography>
+      </Container>
+    );
+  }
 
-  const currentItem = gameItems[0];
-
+  const currentItem = gameItems[currentItemIndex];
+  if (!currentItem) {
+    return null;
+  }
   const handlePLUClick = (selectedPLU: string) => {
     const isCorrect = selectedPLU === currentItem.plu;
-
-    const newGuess = {
-      text: currentItem.fullname,
-      guessedPLU: selectedPLU,
-      correctPLU: currentItem.plu,
-      isCorrect: isCorrect,
-    };
-
-    setPastGuesses([newGuess, ...pastGuesses]);
-    onRound1Data(pastGuesses);
     onAnswer(isCorrect);
   };
-
+  function toTitleCase(str) {
+    return str.replace(
+      /\w\S*/g,
+      (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+    );
+  }
   return (
-    <Container maxWidth="md">
-      {/* Feedback Area */}
-      <div className={styles.feedbackContainer}>
-        <ul>
-          {pastGuesses.map((guess, index) => (
-            <li
-              key={index}
-              className={guess.isCorrect ? styles.correct : styles.error}
-            >
-              {guess.text} - Your guess: {guess.guessedPLU}
-              {!guess.isCorrect && ` - Correct PLU: ${guess.correctPLU}`}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Playing Grid */}
+    <Container>
       <Typography variant="h5" gutterBottom>
-        {currentItem.fullname}
+        Round 1 - Item {currentItemIndex + 1} of {gameItems.length}
+      </Typography>
+      <Typography variant="h6" gutterBottom>
+        {toTitleCase(currentItem.fullname)}
       </Typography>
       <Grid container spacing={2}>
         {gameItems.map((item) => (

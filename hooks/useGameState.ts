@@ -1,79 +1,109 @@
-import { calculateScore, shuffleArray } from '../utils/gameHelpers';
-import { useCallback, useState } from 'react';
+import { GameState, Product, Turn } from '../types';
+import { getLocalStorage, setLocalStorage } from '../utils/localStorageHelpers';
+import { useCallback, useEffect, useState } from 'react';
 
-import { Product } from '../types';
+import { calculateScore } from '../utils/gameHelpers';
 import { products } from '../data/products';
+import { usePlayerState } from './usePlayerState';
 
 export const useGameState = () => {
-  const [currentRound, setCurrentRound] = useState(0);
-  const [score, setScore] = useState(0);
-  const [gameItems, setGameItems] = useState<Product[]>([]);
-  const [Round1Data, setRound1Data] = useState<    {
-    text: string;
-    guessedPLU: string;
-    correctPLU: string;
-    isCorrect: boolean;
-  }[]>([]);
-  const [Round2Data, setRound2Data] = useState<number[]>([]);
-  const [Round3Data, setRound3Data] = useState<number[]>([]);
+  const { selectedPLUs } = usePlayerState();
+  
+  const [gameState, setGameState] = useState<GameState>(() => ({
+    currentRound: getLocalStorage<number>('currentRound', 0) || 0,
+    score: getLocalStorage<number>('score', 0) || 0,
+    hydratedGameItems: getLocalStorage<Product[]>('hydratedGameItems', []) || [],
+    currentItemIndex: getLocalStorage<number>('currentItemIndex', 0) || 0,
+    gameTime: getLocalStorage<number>('gameTime', 0) || 0,
+    history: [],
+    currentTurn: null,
+  }));
 
+  useEffect(() => {
+    setLocalStorage('currentRound', gameState.currentRound);
+    setLocalStorage('score', gameState.score);
+    setLocalStorage('hydratedGameItems', gameState.hydratedGameItems);
+    setLocalStorage('currentItemIndex', gameState.currentItemIndex);
+    setLocalStorage('gameTime', gameState.gameTime);
+  }, [gameState]);
 
-  const startGame = useCallback((selectedPLUs: string[]) => {
-    const selectedProducts = products.filter(product => selectedPLUs.includes(product.plu));
-    setGameItems(shuffleArray(selectedProducts));
-    setCurrentRound(1);
-    setScore(0);
+  const hydrateGameItems = useCallback(() => {
+    const hydratedItems = products.filter(product => selectedPLUs.includes(product.plu));
+    setGameState(prevState => ({
+      ...prevState,
+      hydratedGameItems: hydratedItems
+    }));
+  }, [selectedPLUs]);
+
+  const startGame = useCallback(() => {
+    setGameState(prevState => ({
+      ...prevState,
+      currentRound: 1,
+      score: 0,
+      currentItemIndex: 0,
+      gameTime: Date.now(),
+      history: [],
+      currentTurn: null,
+    }));
+    hydrateGameItems();
+  }, [hydrateGameItems]);
+
+  const handleAnswer = useCallback((turn: Turn) => {
+    setGameState(prevState => {
+      const newScore = prevState.score + (turn.isCorrect ? 1 : 0);
+      const newItemIndex = prevState.currentItemIndex + 1;
+      
+      const newState = {
+        ...prevState,
+        score: newScore,
+        currentItemIndex: newItemIndex,
+        history: [...prevState.history, turn],
+        currentTurn: null,
+      };
+
+      if (newItemIndex >= prevState.hydratedGameItems.length) {
+        return {
+          ...newState,
+          currentRound: prevState.currentRound < 3 ? prevState.currentRound + 1 : 4,
+          currentItemIndex: 0,
+        };
+      } else {
+        return newState;
+      }
+    });
   }, []);
 
-  const handleAnswer = useCallback((isCorrect: boolean) => {
-    setScore(prevScore => prevScore + (isCorrect ? 1 : 0));
-    setGameItems(prevItems => prevItems.slice(1));
-    if (gameItems.length === 1) {
-      setCurrentRound(prevRound => prevRound + 1);
-    }
-  }, [gameItems]);
-
-  const handleRound1Data = useCallback((data: any) => {
-    setRound1Data(data);
+  const calculateFinalScore = useCallback((turns: Turn[]) => {
+  
+    const finalScore = turns.reduce((score, turn) => {
+      return score + (turn.isCorrect ? 1 : 0);
+    }, 0);
+  
+    setGameState(prevState => ({
+      ...prevState,
+      score: finalScore,
+      currentRound: 4,
+      gameTime: Date.now() - prevState.gameTime, // Calculate total game time
+    }));
   }, []);
-
-  const handleRound2Data = useCallback((data: number[]) => {
-    setRound2Data(data);
-  }, []);
-
-  const handleRound3Data = useCallback((data: number[]) => {
-    setRound3Data(data);
-  }, []);
-
-  const advanceRound = useCallback(() => {
-    setCurrentRound(prevRound => prevRound + 1);
-  }, []);
-
-  const calculateFinalScore = useCallback((userAnswers: Record<string, string>) => {
-    const correctAnswers = gameItems.reduce((acc, item) => ({
-      ...acc,
-      [item.plu]: item.fullname
-    }), {} as Record<string, string>);
-    const finalScore = calculateScore(userAnswers, correctAnswers);
-    setScore(finalScore);
-    setCurrentRound(4);
-  }, [gameItems]);
 
   const resetGame = useCallback(() => {
-    setCurrentRound(0);
-    setScore(0);
-    setGameItems([]);
+    setGameState({
+      currentRound: 0,
+      score: 0,
+      hydratedGameItems: [],
+      currentItemIndex: 0,
+      gameTime: 0,
+      history: [],
+      currentTurn: null,
+    });
   }, []);
 
   return {
-    gameState: { currentRound, score, gameItems },
+    gameState,
     startGame,
     handleAnswer,
-    handleRound1Data,
-    handleRound2Data,
-    handleRound3Data,
-    advanceRound,
     calculateFinalScore,
-    resetGame
+    resetGame,
   };
 };

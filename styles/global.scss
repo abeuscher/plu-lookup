@@ -92,3 +92,9 @@ footer {
 .active-link {
   color: white;
 }
+.game-round-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0 1rem;
+}

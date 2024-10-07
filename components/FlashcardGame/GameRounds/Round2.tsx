@@ -1,47 +1,65 @@
-import { Button, Container, Grid, Typography } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Container,
+  TextField,
+  Typography,
+} from '@mui/material';
+import React, { useState } from 'react';
 
-import { Product } from '../../../types';
+import { RoundProps } from '../../../types';
 
-interface Round2Props {
-  onAnswer: (isCorrect: boolean) => void;
-  gameItems: Product[];
-}
+const Round2: React.FC<RoundProps> = ({
+  onAnswer,
+  gameItems,
+  currentItemIndex,
+}) => {
+  const [userInput, setUserInput] = useState('');
 
-const Round2: React.FC<Round2Props> = ({ onAnswer, gameItems }) => {
-  if (gameItems.length === 0) {
+  if (!gameItems || gameItems.length === 0) {
     return (
-      <Container maxWidth="md">
-        <Typography variant="h5" gutterBottom>
-          No more items to quiz. Moving to next round...
-        </Typography>
+      <Container>
+        <CircularProgress />
+        <Typography>Loading game items...</Typography>
       </Container>
     );
   }
 
-  const currentItem = gameItems[0];
+  const currentItem = gameItems[currentItemIndex];
 
-  const handleNameClick = (selectedName: string) => {
-    onAnswer(selectedName === currentItem.fullname);
+  if (!currentItem) {
+    return (
+      <Container>
+        <Typography variant="h5">Round 2 Complete</Typography>
+      </Container>
+    );
+  }
+
+  const handleSubmit = () => {
+    const isCorrect =
+      userInput.trim().toLowerCase() === currentItem.fullname.toLowerCase();
+    onAnswer(isCorrect);
+    setUserInput('');
   };
 
   return (
-    <Container maxWidth="md">
+    <Container>
       <Typography variant="h5" gutterBottom>
-        {currentItem.plu}
+        Round 2 - Item {currentItemIndex + 1} of {gameItems.length}
       </Typography>
-      <Grid container spacing={2}>
-        {gameItems.map((item) => (
-          <Grid item xs={6} key={item.plu}>
-            <Button
-              variant="contained"
-              fullWidth
-              onClick={() => handleNameClick(item.fullname)}
-            >
-              {item.fullname}
-            </Button>
-          </Grid>
-        ))}
-      </Grid>
+      <Typography variant="h6" gutterBottom>
+        PLU: {currentItem.plu}
+      </Typography>
+      <TextField
+        fullWidth
+        value={userInput}
+        onChange={(e) => setUserInput(e.target.value)}
+        placeholder="Enter the product name"
+        margin="normal"
+      />
+      <Button variant="contained" onClick={handleSubmit}>
+        Submit Answer
+      </Button>
     </Container>
   );
 };

@@ -6,15 +6,30 @@ export interface Product {
   variety: string;
   category: string;
 }
+export type Turn = {
+  round: number;
+  playerGuess?: string;
+  correctAnswer?: string;
+  isCorrect?: boolean;
+};
 
 export interface GameState {
   currentRound: number;
   score: number;
-  gameItems: Product[];
-  finalScore?: number;
+  currentItemIndex: number;
+  hydratedGameItems: Product[];
+  gameTime: number;
+  history: Turn[];
+  currentTurn: Turn | null;
 }
 
 export interface PlayerState {
   playerName: string;
   selectedPLUs: string[];
+}
+
+export interface RoundProps {
+  onAnswer: (turn: Turn) => void;
+  gameItems: Product[];
+  currentItemIndex: number;
 }
