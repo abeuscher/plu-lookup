@@ -3,11 +3,7 @@
 import Exporter from '../../components/Exporter';
 
 const ExporterPage = () => {
-  return (
-    <>
-      <Exporter />
-    </>
-  );
+  return <Exporter />;
 };
 
 export default ExporterPage;

@@ -3,11 +3,7 @@
 import ProductSearch from '../../components/ProductSearch';
 
 const VoiceLookup = () => {
-  return (
-    <>
-      <ProductSearch />
-    </>
-  );
+  return <ProductSearch />;
 };
 
 export default VoiceLookup;

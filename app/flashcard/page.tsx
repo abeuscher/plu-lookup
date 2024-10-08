@@ -7,14 +7,10 @@ const FlashcardPage = () => {
   const { isAuthenticated } = useAuthCheck();
 
   if (!isAuthenticated) {
-    return null; // or a loading spinner
+    return null;
   }
 
-  return (
-    <div>
-      <FlashcardGame />
-    </div>
-  );
+  return <FlashcardGame />;
 };
 
 export default FlashcardPage;
