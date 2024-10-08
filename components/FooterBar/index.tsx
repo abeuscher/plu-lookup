@@ -49,9 +49,10 @@ function FooterBar() {
           </div>
         </Toolbar>
 
-        {/* Copyright Section */}
         <div className={styles.copyright}>
-          © {footerData.copyrightYear} {footerData.title}. All Rights Reserved.
+          <Link href="https://github.com/abeuscher/plu-lookup" target="_blank">
+            github
+          </Link>
         </div>
       </Container>
     </AppBar>

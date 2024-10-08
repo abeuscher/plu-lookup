@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Button,
   AppBar as MuiAppBar,
@@ -28,30 +30,29 @@ export const AppBar: React.FC<AppBarProps> = ({
         <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
           {title}
         </Typography>
+        <Typography variant="body1" style={{ marginRight: 16 }}>
+          Player: {playerName}
+        </Typography>
         {gameState && gameState.currentRound > 0 && (
           <>
-            <Typography variant="h5" style={{ marginRight: 16 }}>
-              Game Details
+            <Typography variant="body1" style={{ marginRight: 12 }}>
+              Round {gameState.currentRound}
             </Typography>
             <Typography variant="body1" style={{ marginRight: 12 }}>
               Score: {gameState.score}
             </Typography>
-            <Typography variant="body1" style={{ marginRight: 12 }}>
-              Round {gameState.currentRound}
-            </Typography>
+
             <Button
               variant="contained"
+              size="small"
               color="secondary"
               onClick={onRestartGame}
-              style={{ marginRight: 16 }}
+              style={{ marginLeft: 16 }}
             >
               Restart Game
             </Button>
           </>
         )}
-        <Typography variant="body1" style={{ marginLeft: 16 }}>
-          Player: {playerName}
-        </Typography>
       </Toolbar>
     </MuiAppBar>
   );

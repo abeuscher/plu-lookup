@@ -1,14 +1,16 @@
+'use client';
+
 import { Container, Typography } from '@mui/material';
 
 import { AppBar } from '../shared/AppBar';
 import GameOver from './GameOver';
+import { Guess } from '../../types';
 import Link from 'next/link';
 import React from 'react';
 import Round0 from './GameRounds/Round0';
 import Round1 from './GameRounds/Round1';
 import Round2 from './GameRounds/Round2';
 import Round3 from './GameRounds/Round3';
-import { Turn } from '../../types';
 import { useGameState } from '../../hooks/useGameState';
 import { usePlayerState } from '../../hooks/usePlayerState';
 
@@ -17,13 +19,14 @@ const FlashcardGame: React.FC = () => {
   const { gameState, startGame, handleAnswer, calculateFinalScore, resetGame } =
     useGameState();
 
-  const onAnswer = (turn: Turn) => {
-    const completeTurn: Turn = {
-      ...turn,
+  const onAnswer = (guess: Guess) => {
+    gameState.currentTurn = {
       round: gameState.currentRound,
-      isCorrect: turn.playerGuess === turn.correctAnswer,
+      playerGuess: guess.playerGuess,
+      correctAnswer: guess.correctAnswer,
+      isCorrect: guess.playerGuess === guess.correctAnswer,
     };
-    handleAnswer(completeTurn);
+    handleAnswer();
   };
 
   const handleRestartGame = () => {
@@ -98,7 +101,9 @@ const FlashcardGame: React.FC = () => {
         gameState={gameState}
         onRestartGame={handleRestartGame}
       />
-      <Container>{renderCurrentStage()}</Container>
+      <Container className="game-round-container">
+        {renderCurrentStage()}
+      </Container>
     </>
   );
 };

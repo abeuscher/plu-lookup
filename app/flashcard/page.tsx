@@ -1,7 +1,7 @@
 'use client';
 
 import FlashcardGame from '../../components/FlashcardGame';
-import { useAuthCheck } from '../../utils/authCheck';
+import { useAuthCheck } from '../../utils/';
 
 const FlashcardPage = () => {
   const { isAuthenticated } = useAuthCheck();

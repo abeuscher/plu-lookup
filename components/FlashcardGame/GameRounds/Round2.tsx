@@ -1,65 +1,64 @@
-import {
-  Button,
-  CircularProgress,
-  Container,
-  TextField,
-  Typography,
-} from '@mui/material';
-import React, { useState } from 'react';
+'use client';
 
+import { Button, Container, Typography } from '@mui/material';
+
+import Grid from '@mui/material/Grid2';
 import { RoundProps } from '../../../types';
+import { shuffleItems } from '../../../utils';
 
 const Round2: React.FC<RoundProps> = ({
   onAnswer,
   gameItems,
   currentItemIndex,
 }) => {
-  const [userInput, setUserInput] = useState('');
-
-  if (!gameItems || gameItems.length === 0) {
+  if (
+    !gameItems ||
+    gameItems.length === 0 ||
+    currentItemIndex >= gameItems.length
+  ) {
     return (
       <Container>
-        <CircularProgress />
-        <Typography>Loading game items...</Typography>
+        <Typography>No items available for Round 2</Typography>
       </Container>
     );
   }
-
   const currentItem = gameItems[currentItemIndex];
-
   if (!currentItem) {
-    return (
-      <Container>
-        <Typography variant="h5">Round 2 Complete</Typography>
-      </Container>
-    );
+    return null;
   }
 
-  const handleSubmit = () => {
-    const isCorrect =
-      userInput.trim().toLowerCase() === currentItem.fullname.toLowerCase();
-    onAnswer(isCorrect);
-    setUserInput('');
+  const handleProductClick = (selectedProductName: string) => {
+    onAnswer({
+      playerGuess: selectedProductName,
+      correctAnswer: currentItem.fullname,
+    });
   };
 
   return (
     <Container>
-      <Typography variant="h5" gutterBottom>
-        Round 2 - Item {currentItemIndex + 1} of {gameItems.length}
+      <Typography variant="body1" gutterBottom>
+        Round 2
+        <span style={{ float: 'right' }}>
+          Item {currentItemIndex + 1} of {gameItems.length}
+        </span>
       </Typography>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h3" gutterBottom>
         PLU: {currentItem.plu}
       </Typography>
-      <TextField
-        fullWidth
-        value={userInput}
-        onChange={(e) => setUserInput(e.target.value)}
-        placeholder="Enter the product name"
-        margin="normal"
-      />
-      <Button variant="contained" onClick={handleSubmit}>
-        Submit Answer
-      </Button>
+      <Grid container spacing={2}>
+        {shuffleItems(gameItems).map((item) => (
+          <Grid key={item.fullname} size={{ xs: 3 }}>
+            <Button
+              className="round-2-tile"
+              variant="contained"
+              fullWidth
+              onClick={() => handleProductClick(item.fullname)}
+            >
+              {item.fullname}
+            </Button>
+          </Grid>
+        ))}
+      </Grid>
     </Container>
   );
 };

@@ -27,9 +27,12 @@ export interface PlayerState {
   playerName: string;
   selectedPLUs: string[];
 }
-
+export interface Guess {
+  playerGuess: string;
+  correctAnswer: string;
+}
 export interface RoundProps {
-  onAnswer: (turn: Turn) => void;
+  onAnswer: (guess: Guess) => void;
   gameItems: Product[];
   currentItemIndex: number;
 }

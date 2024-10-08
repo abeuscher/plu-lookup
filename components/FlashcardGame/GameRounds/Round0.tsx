@@ -1,3 +1,5 @@
+'use client';
+
 import { Button, Container, Typography } from '@mui/material';
 
 interface Round0Props {

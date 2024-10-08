@@ -1,6 +1,6 @@
 'use client';
 
-import { getLocalStorage, setLocalStorage } from '../utils/localStorageHelpers';
+import { getLocalStorage, setLocalStorage } from '../utils/';
 import { useEffect, useState } from 'react';
 
 export const usePlayerState = () => {
