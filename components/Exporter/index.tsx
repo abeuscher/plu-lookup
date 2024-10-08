@@ -110,7 +110,7 @@ const Exporter = () => {
     <Box sx={{ padding: 3 }}>
       <Paper elevation={3} sx={{ padding: 4, backgroundColor: '#f5f5f5' }}>
         <Typography variant="h4" gutterBottom>
-          Export and Import Product Data
+          Export Product Data
         </Typography>
 
         <Typography variant="body1" paragraph>
@@ -134,14 +134,29 @@ const Exporter = () => {
             </Button>
           </Grid>
         </Grid>
-
+        <Typography variant="h4" gutterBottom>
+          Import Product Data
+        </Typography>
         {/* File Input for CSV Import */}
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
           <Grid item>
-            <input type="file" accept=".csv" onChange={handleFileUpload} />
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              id="file-button"
+              style={{ display: 'none' }}
+            />
+            <label htmlFor="file-button">
+              <Button variant="contained" color="primary" component="span">
+                Upload
+              </Button>
+            </label>
           </Grid>
         </Grid>
-
+        <Typography variant="h4" gutterBottom>
+          Display Product Data
+        </Typography>
         {/* Display Data Buttons */}
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
           <Grid item>
