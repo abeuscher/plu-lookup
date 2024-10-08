@@ -4,15 +4,14 @@ import { Container, Typography } from '@mui/material';
 
 import { AppBar } from '../shared/AppBar';
 import GameOver from './GameOver';
-import { Guess } from '../../types';
+import { Guess } from '@/types';
 import Link from 'next/link';
-import React from 'react';
 import Round0 from './GameRounds/Round0';
 import Round1 from './GameRounds/Round1';
 import Round2 from './GameRounds/Round2';
 import Round3 from './GameRounds/Round3';
-import { useGameState } from '../../hooks/useGameState';
-import { usePlayerState } from '../../hooks/usePlayerState';
+import { useGameState } from '@/hooks/useGameState';
+import { usePlayerState } from '@/hooks/usePlayerState';
 
 const FlashcardGame: React.FC = () => {
   const { playerName, selectedPLUs } = usePlayerState();

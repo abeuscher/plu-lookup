@@ -17,7 +17,7 @@ import { Mic, MicOff, Save } from '@mui/icons-material';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Fuse from 'fuse.js';
-import { products } from '../../data/products';
+import { products } from '@/data/products';
 
 interface Product {
   plu: string;
@@ -56,7 +56,7 @@ const ProductSearch: React.FC = () => {
 
   const fuse = new Fuse(products, fuseOptions);
   useEffect(() => {
-    if (recognitionRef.current) return; // Prevent re-initialization
+    if (recognitionRef.current) return;
 
     const isSpeechRecognitionAvailable = (): boolean => {
       if (typeof window === 'undefined') return false;
@@ -106,7 +106,6 @@ const ProductSearch: React.FC = () => {
 
       recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error('Speech recognition error:', event.error);
-        // Optionally, handle the error or set isListening to false
       };
 
       recognitionRef.current.onend = () => {
@@ -122,7 +121,7 @@ const ProductSearch: React.FC = () => {
     return () => {
       recognitionRef.current?.stop();
     };
-  }, []); // Empty dependency array
+  }, []);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

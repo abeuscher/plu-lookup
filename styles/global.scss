@@ -38,20 +38,6 @@ main {
   padding: 0 0 2rem;
   min-height: 50vh;
 }
-// Define Sections
-section {
-  padding: 3rem 1.5rem;
-  margin: 2rem 0;
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
-
-  &:hover {
-    transform: scale(1.02);
-  }
-}
 
 // Links Styling
 a {
@@ -104,4 +90,74 @@ footer {
   font-size: 3rem;
   font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
+}
+// Add this to your global.scss file or create a new SCSS file for Round1 component
+
+@keyframes flip {
+  0% {
+    transform: rotateY(0deg);
+  }
+  50% {
+    transform: rotateY(180deg);
+  }
+  100% {
+    transform: rotateY(0deg);
+  }
+}
+
+.round-1-tile,
+.round-2-tile {
+  aspect-ratio: 1/1;
+  font-size: 3rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  position: relative;
+  perspective: 1000px;
+  cursor: pointer;
+  background-color: #1976d2; // MUI default primary color
+  color: white;
+  border: none;
+  transform-style: preserve-3d;
+
+  &:focus {
+    animation: flip 0.5s ease-in-out forwards 1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+  }
+
+  &::before {
+    content: attr(data-plu);
+    background-color: #1976d2;
+    color: white;
+  }
+
+  &::after {
+    background-color: white;
+    transform: rotateY(180deg);
+  }
+
+  &.correct::after {
+    content: '\2714'; // Unicode checkmark
+    color: #4caf50; // Green for correct answer
+  }
+
+  &.incorrect::after {
+    content: '\2716'; // Unicode X mark
+    color: #f44336; // Red for incorrect answer
+  }
+}
+.round-2-tile {
+  font-size: 1rem;
 }

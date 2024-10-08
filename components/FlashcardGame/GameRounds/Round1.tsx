@@ -3,8 +3,8 @@
 import { Button, Container, Typography } from '@mui/material';
 
 import Grid from '@mui/material/Grid2';
-import { RoundProps } from '../../../types';
-import { useGameState } from '../../../hooks/useGameState';
+import { RoundProps } from '@/types';
+import { toTitleCase } from '@/utils';
 
 const Round1: React.FC<RoundProps> = ({
   onAnswer,
@@ -22,7 +22,6 @@ const Round1: React.FC<RoundProps> = ({
       </Container>
     );
   }
-  const { shuffleItems } = useGameState();
   const currentItem = gameItems[currentItemIndex];
   if (!currentItem) {
     return null;
@@ -30,16 +29,11 @@ const Round1: React.FC<RoundProps> = ({
   const handlePLUClick = (selectedPLU: string) => {
     onAnswer({ playerGuess: selectedPLU, correctAnswer: currentItem.plu });
   };
-  function toTitleCase(str) {
-    return str.replace(
-      /\w\S*/g,
-      (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
-    );
-  }
+
   return (
     <Container>
       <Typography variant="body1" gutterBottom>
-        Round 1{' '}
+        Round 1
         <span style={{ float: 'right' }}>
           Item {currentItemIndex + 1} of {gameItems.length}
         </span>
@@ -48,10 +42,10 @@ const Round1: React.FC<RoundProps> = ({
         {toTitleCase(currentItem.fullname)}
       </Typography>
       <Grid container spacing={2}>
-        {shuffleItems(gameItems).map((item) => (
+        {gameItems.map((item) => (
           <Grid key={item.plu} size={{ xs: 3 }}>
             <Button
-              className="round-1-tile"
+              className={`round-1-tile ${item.plu === currentItem.plu ? 'correct' : 'incorrect'}`}
               variant="contained"
               fullWidth
               onClick={() => handlePLUClick(item.plu)}

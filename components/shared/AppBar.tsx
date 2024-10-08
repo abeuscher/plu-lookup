@@ -7,9 +7,9 @@ import {
   Typography,
 } from '@mui/material';
 
-import { GameState } from '../../types';
+import { GameState } from '@/types';
 import React from 'react';
-import { usePlayerState } from '../../hooks/usePlayerState';
+import { usePlayerState } from '@/hooks/usePlayerState';
 
 interface AppBarProps {
   title: string;

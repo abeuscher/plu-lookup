@@ -69,7 +69,6 @@ export const useGameState = () => {
         history: [...prevState.history, prevState.currentTurn],
         currentTurn: Object.assign({ round: prevState.currentRound}, emptyTurn),
       };
-      console.log(newState);
       if (newItemIndex >= prevState.hydratedGameItems.length) {
         const newIndex = prevState.currentRound < 3 ? prevState.currentRound + 1 : 4
         return {

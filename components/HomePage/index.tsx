@@ -16,8 +16,8 @@ import {
 import React, { useEffect, useState } from 'react';
 
 import PLUSelector from '../shared/PLUSelector';
-import { defaultGroups } from '../../data/products';
-import { usePlayerState } from '../../hooks/usePlayerState';
+import { defaultGroups } from '@/data/products';
+import { usePlayerState } from '@/hooks/usePlayerState';
 
 const HomePage: React.FC = () => {
   const { playerName, setPlayerName, selectedPLUs, setSelectedPLUs } =

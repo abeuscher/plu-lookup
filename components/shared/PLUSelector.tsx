@@ -23,8 +23,7 @@ import {
 import { Clear, ExpandMore } from '@mui/icons-material';
 import React, { useState } from 'react';
 
-import { products } from '../../data/products';
-import { useDebounce } from '../../hooks/useDebounce';
+import { products } from '@/data/products';
 
 interface Product {
   plu: string;

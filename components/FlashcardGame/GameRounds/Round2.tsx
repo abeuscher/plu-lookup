@@ -3,8 +3,8 @@
 import { Button, Container, Typography } from '@mui/material';
 
 import Grid from '@mui/material/Grid2';
-import { RoundProps } from '../../../types';
-import { shuffleItems } from '../../../utils';
+import { RoundProps } from '@/types';
+import { toTitleCase } from '@/utils';
 
 const Round2: React.FC<RoundProps> = ({
   onAnswer,
@@ -46,10 +46,10 @@ const Round2: React.FC<RoundProps> = ({
         PLU: {currentItem.plu}
       </Typography>
       <Grid container spacing={2}>
-        {shuffleItems(gameItems).map((item) => (
+        {gameItems.map((item) => (
           <Grid key={item.fullname} size={{ xs: 3 }}>
             <Button
-              className="round-2-tile"
+              className={`round-2-tile  ${item.plu === currentItem.plu ? 'correct' : 'incorrect'}`}
               variant="contained"
               fullWidth
               onClick={() => handleProductClick(item.fullname)}

@@ -1,11 +1,11 @@
-'use client'; // This line is a comment and will be removed by the CLI
+'use client';
 
 import { AppBar, Container, Toolbar } from '@mui/material';
 
 import Link from 'next/link';
 import React from 'react';
-import { menuItems } from '../../data/nav';
-import styles from './Footer.module.scss'; // Importing styles from component stylesheet
+import { menuItems } from '@/data/nav';
+import styles from './Footer.module.scss';
 
 const footerData = {
   title: 'PLU Madness',

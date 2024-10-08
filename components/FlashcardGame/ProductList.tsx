@@ -1,6 +1,6 @@
 import { List, ListItem, ListItemText, Typography } from '@mui/material';
 
-import { Product } from '../../types';
+import { Product } from '@/types';
 import React from 'react';
 
 interface ProductListProps {

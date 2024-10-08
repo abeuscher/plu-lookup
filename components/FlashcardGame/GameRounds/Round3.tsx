@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Container, TextField, Typography } from '@mui/material';
-import { Product, Turn } from '../../../types';
+import { Product, Turn } from '@/types';
 
 import { useState } from 'react';
 

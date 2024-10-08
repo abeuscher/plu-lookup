@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Typography } from '@mui/material';
-import { usePlayerState } from '../../hooks/usePlayerState';
+import { usePlayerState } from '@/hooks/usePlayerState';
 
 const PlayerInfo: React.FC = () => {
   const { playerName } = usePlayerState();

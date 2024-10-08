@@ -18,7 +18,7 @@ import Link from 'next/link';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import React from 'react';
 import { ShoppingCart } from '@mui/icons-material';
-import { menuItems } from '../../data/nav';
+import { menuItems } from '@/data/nav';
 import { usePathname } from 'next/navigation';
 
 function isActiveLink(currentPath, itemHref) {
