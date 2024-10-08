@@ -52,3 +52,10 @@ export const toTitleCase = (str) => {
     (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
   );
 };
+
+export const emptyTurn = {
+  round: 0,
+  playerGuess: null,
+  correctAnswer: null,
+  isCorrect: null,
+}

@@ -3,13 +3,13 @@ import { act, renderHook } from '@testing-library/react';
 import { usePlayerState } from '../usePlayerState';
 
 // Mock the localStorage helpers
-jest.mock('../../utils/localStorageHelpers', () => ({
+jest.mock('../../utils/', () => ({
   getLocalStorage: jest.fn(),
   setLocalStorage: jest.fn(),
 }));
 
 describe('usePlayerState Hook', () => {
-  const { getLocalStorage, setLocalStorage } = require('../../utils/localStorageHelpers');
+  const { getLocalStorage, setLocalStorage } = require('../../utils/');
 
   beforeEach(() => {
     jest.clearAllMocks();

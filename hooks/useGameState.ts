@@ -1,16 +1,10 @@
 import { GameState, Product, Turn } from '../types';
-import { getLocalStorage, setLocalStorage, shuffleItems } from '../utils/';
+import { emptyTurn, getLocalStorage, setLocalStorage, shuffleItems } from '../utils/';
 import { useCallback, useEffect, useState } from 'react';
 
 import { products } from '../data/products';
 import { usePlayerState } from './usePlayerState';
 
-const emptyTurn = {
-  round: 0,
-  playerGuess: null,
-  correctAnswer: null,
-  isCorrect: null,
-}
 export const useGameState = () => {
   const { selectedPLUs } = usePlayerState();
   
@@ -52,7 +46,7 @@ export const useGameState = () => {
       currentItemIndex: 0,
       gameTime: Date.now(),
       history: [],
-      currentTurn: null,
+      currentTurn: emptyTurn,
     }));
     hydrateGameItems();
   }, [hydrateGameItems]);
@@ -67,16 +61,27 @@ export const useGameState = () => {
         score: newScore,
         currentItemIndex: newItemIndex,
         history: [...prevState.history, prevState.currentTurn],
-        currentTurn: Object.assign({ round: prevState.currentRound}, emptyTurn),
+        currentTurn: {
+          round: prevState.currentRound,
+          playerGuess: null,
+          correctAnswer: null,
+          isCorrect: null,
+        },
       };
+  
       if (newItemIndex >= prevState.hydratedGameItems.length) {
-        const newIndex = prevState.currentRound < 3 ? prevState.currentRound + 1 : 4
+        const newRound = prevState.currentRound < 3 ? prevState.currentRound + 1 : 4;
         return {
           ...newState,
           hydratedGameItems: shuffleItems(prevState.hydratedGameItems),
-          currentRound: newIndex,
+          currentRound: newRound,
           currentItemIndex: 0,
-          currentTurn: Object.assign({ round: newIndex}, emptyTurn),
+          currentTurn: {
+            round: newRound,
+            playerGuess: null,
+            correctAnswer: null,
+            isCorrect: null,
+          },
         };
       } else {
         return newState;
@@ -106,7 +111,7 @@ export const useGameState = () => {
       currentItemIndex: 0,
       gameTime: 0,
       history: [],
-      currentTurn: null,
+      currentTurn: emptyTurn,
     });
   }, []);
 

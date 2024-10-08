@@ -28,10 +28,12 @@ const Round2: React.FC<RoundProps> = ({
   }
 
   const handleProductClick = (selectedProductName: string) => {
-    onAnswer({
-      playerGuess: selectedProductName,
-      correctAnswer: currentItem.fullname,
-    });
+    setTimeout(() => {
+      onAnswer({
+        playerGuess: selectedProductName,
+        correctAnswer: currentItem.fullname,
+      });
+    }, 500);
   };
 
   return (
@@ -54,7 +56,7 @@ const Round2: React.FC<RoundProps> = ({
               fullWidth
               onClick={() => handleProductClick(item.fullname)}
             >
-              {item.fullname}
+              {toTitleCase(item.fullname)}
             </Button>
           </Grid>
         ))}

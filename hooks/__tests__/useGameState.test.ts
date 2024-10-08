@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 
 import { Turn } from '../../types';
+import { emptyTurn } from '@/utils';
 import { useGameState } from '../useGameState';
 import { usePlayerState } from '../usePlayerState';
 
@@ -28,7 +29,7 @@ describe('useGameState Hook', () => {
       currentItemIndex: 0,
       gameTime: 0,
       history: [],
-      currentTurn: null,
+      currentTurn: emptyTurn,
     });
   });
 
@@ -124,7 +125,7 @@ describe('useGameState Hook', () => {
       currentItemIndex: 0,
       gameTime: 0,
       history: [],
-      currentTurn: null,
+      currentTurn: emptyTurn,
     });
   });
 });

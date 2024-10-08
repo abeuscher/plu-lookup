@@ -27,7 +27,9 @@ const Round1: React.FC<RoundProps> = ({
     return null;
   }
   const handlePLUClick = (selectedPLU: string) => {
-    onAnswer({ playerGuess: selectedPLU, correctAnswer: currentItem.plu });
+    setTimeout(() => {
+      onAnswer({ playerGuess: selectedPLU, correctAnswer: currentItem.plu });
+    }, 500);
   };
 
   return (

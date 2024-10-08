@@ -2,9 +2,19 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import React from 'react';
 import Round1 from '../FlashcardGame/GameRounds/Round1';
-import { products } from '../../data/products';
+import { toTitleCase } from '@/utils';
 
-const mockGameItems = products.slice(0, 4);
+// Mock the products data
+jest.mock('../../data/products', () => ({
+  products: [
+    { id: 1, plu: '3000', fullname: 'ALKMENE APPLES' },
+    { id: 2, plu: '3001', fullname: 'BRAEBURN APPLES' },
+    { id: 3, plu: '3002', fullname: 'CAMEO APPLES' },
+    { id: 4, plu: '3003', fullname: 'CORTLAND APPLES' },
+  ],
+}));
+
+const mockGameItems = require('../../data/products').products;
 
 describe('Round1 Component', () => {
   const mockOnAnswer = jest.fn();
@@ -18,8 +28,11 @@ describe('Round1 Component', () => {
       />
     );
 
-    expect(screen.getByText(/Round 1 - Item 1 of 4/)).toBeInTheDocument();
-    expect(screen.getByText(/Alkmene Apples/)).toBeInTheDocument();
+    expect(screen.getByText('Round 1')).toBeInTheDocument();
+    expect(screen.getByText('Item 1 of 4')).toBeInTheDocument();
+    expect(
+      screen.getByText(toTitleCase(mockGameItems[0].fullname))
+    ).toBeInTheDocument();
 
     mockGameItems.forEach((item) => {
       expect(
@@ -39,7 +52,10 @@ describe('Round1 Component', () => {
 
     fireEvent.click(screen.getByRole('button', { name: mockGameItems[0].plu }));
 
-    expect(mockOnAnswer).toHaveBeenCalledWith(true);
+    expect(mockOnAnswer).toHaveBeenCalledWith({
+      playerGuess: mockGameItems[0].plu,
+      correctAnswer: mockGameItems[0].plu,
+    });
   });
 
   it('should render "No items available" when all items are answered', () => {

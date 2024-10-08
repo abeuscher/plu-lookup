@@ -115,6 +115,9 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
       />
       <Toolbar variant="dense" style={{ justifyContent: 'space-between' }}>
         <Box display="flex" alignItems="center">
+          <Typography variant="body2">
+            {selectedPLUs.length} selected items
+          </Typography>
           <FormControlLabel
             control={
               <Switch
@@ -123,12 +126,14 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
                 color="primary"
               />
             }
-            label="Show Checked Only"
+            label="Show Selected Only"
           />
+        </Box>
+        <Box display="flex" alignItems="right">
           <FormControl
             variant="outlined"
             size="small"
-            style={{ marginLeft: '16px' }}
+            style={{ marginRight: '1rem' }}
           >
             <InputLabel>Sort By</InputLabel>
             <Select
@@ -141,19 +146,16 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
               <MenuItem value="category">Category</MenuItem>
             </Select>
           </FormControl>
-          <Typography variant="body2" style={{ marginLeft: '16px' }}>
-            {selectedPLUs.length} selected items
-          </Typography>
+          <Tooltip title="Reset Selections">
+            <Button
+              onClick={handleResetSelections}
+              color="warning"
+              startIcon={<Clear />}
+            >
+              Reset Form
+            </Button>
+          </Tooltip>
         </Box>
-        <Tooltip title="Reset Selections">
-          <Button
-            onClick={handleResetSelections}
-            color="warning"
-            startIcon={<Clear />}
-          >
-            Reset Form
-          </Button>
-        </Tooltip>
       </Toolbar>
       <Box>
         {Object.keys(productsByCategory).map((category) => (

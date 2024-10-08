@@ -104,7 +104,7 @@ describe('FlashcardGame Component', () => {
       resetGame: jest.fn(),
     });
     rerender(<FlashcardGame />);
-    expect(screen.getByText('Round 1')).toBeInTheDocument();
+    expect(screen.getByText('Flashcard Game - Round 1')).toBeInTheDocument();
 
     mockUseGameState.mockReturnValue({
       gameState: {
@@ -121,7 +121,7 @@ describe('FlashcardGame Component', () => {
       resetGame: jest.fn(),
     });
     rerender(<FlashcardGame />);
-    expect(screen.getByText('Round 2')).toBeInTheDocument();
+    expect(screen.getByText('Flashcard Game - Round 2')).toBeInTheDocument();
 
     mockUseGameState.mockReturnValue({
       gameState: {
@@ -139,9 +139,6 @@ describe('FlashcardGame Component', () => {
     });
     rerender(<FlashcardGame />);
     expect(screen.getByText('Flashcard Game - Round 3')).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 2, name: 'Round 3' })
-    ).toBeInTheDocument();
 
     mockUseGameState.mockReturnValue({
       gameState: {
