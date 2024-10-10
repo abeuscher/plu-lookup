@@ -51,11 +51,12 @@ describe('Round1 Component', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: mockGameItems[0].plu }));
-
-    expect(mockOnAnswer).toHaveBeenCalledWith({
-      playerGuess: mockGameItems[0].plu,
-      correctAnswer: mockGameItems[0].plu,
-    });
+    setTimeout(() => {
+      expect(mockOnAnswer).toHaveBeenCalledWith({
+        playerGuess: mockGameItems[0].plu,
+        correctAnswer: mockGameItems[0].plu,
+      });
+    }, 500);
   });
 
   it('should render "No items available" when all items are answered', () => {

@@ -1,7 +1,7 @@
 import {
   Box,
   Button,
-  Grid,
+  Grid2 as Grid,
   Modal,
   Paper,
   Table,

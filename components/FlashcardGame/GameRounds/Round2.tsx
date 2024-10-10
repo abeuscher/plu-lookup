@@ -1,8 +1,7 @@
 'use client';
 
-import { Button, Container, Typography } from '@mui/material';
+import { Button, Container, Grid2 as Grid, Typography } from '@mui/material';
 
-import Grid from '@mui/material/Grid2';
 import { RoundProps } from '@/types';
 import { toTitleCase } from '@/utils';
 

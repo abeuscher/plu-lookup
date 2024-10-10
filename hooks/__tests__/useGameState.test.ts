@@ -53,24 +53,26 @@ describe('useGameState Hook', () => {
     expect(result.current.gameState.currentItemIndex).toBe(0);
 
     act(() => {
-      result.current.handleAnswer({
+      result.current.gameState.currentTurn = {
         round: 1,
         playerGuess: 'Pears',
         correctAnswer: 'Pears',
         isCorrect: true,
-      });
+      }
+      result.current.handleAnswer();
     });
 
     expect(result.current.gameState.score).toBe(1);
     expect(result.current.gameState.currentItemIndex).toBe(1);
 
     act(() => {
-      result.current.handleAnswer({
+      result.current.gameState.currentTurn = {
         round: 1,
         playerGuess: 'Pears',
         correctAnswer: 'Pears',
         isCorrect: true,
-      });
+      }
+      result.current.handleAnswer();
     });
 
     expect(result.current.gameState.score).toBe(2);
