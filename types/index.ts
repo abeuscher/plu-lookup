@@ -17,6 +17,7 @@ export interface GameState {
   currentRound: number;
   score: number;
   currentItemIndex: number;
+  shuffledIndexes: number[];
   hydratedGameItems: Product[];
   gameTime: number;
   history: Turn[];
@@ -35,4 +36,5 @@ export interface RoundProps {
   onAnswer: (guess: Guess) => void;
   gameItems: Product[];
   currentItemIndex: number;
+  shuffledIndexes: number[];
 }

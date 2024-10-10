@@ -30,7 +30,6 @@ const FlashcardGame: React.FC = () => {
 
   const handleRestartGame = () => {
     resetGame();
-    // Not calling startGame() here, so it resets to Round 0
   };
 
   const renderCurrentStage = () => {
@@ -48,6 +47,7 @@ const FlashcardGame: React.FC = () => {
           <Round1
             onAnswer={onAnswer}
             gameItems={gameState.hydratedGameItems}
+            shuffledIndexes={gameState.shuffledIndexes}
             currentItemIndex={gameState.currentItemIndex}
           />
         );
@@ -56,6 +56,7 @@ const FlashcardGame: React.FC = () => {
           <Round2
             onAnswer={onAnswer}
             gameItems={gameState.hydratedGameItems}
+            shuffledIndexes={gameState.shuffledIndexes}
             currentItemIndex={gameState.currentItemIndex}
           />
         );

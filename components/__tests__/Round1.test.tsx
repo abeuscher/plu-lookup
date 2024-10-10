@@ -15,7 +15,7 @@ jest.mock('../../data/products', () => ({
 }));
 
 const mockGameItems = require('../../data/products').products;
-
+const shuffledIndexes = Array.from(Array(mockGameItems.length).keys());
 describe('Round1 Component', () => {
   const mockOnAnswer = jest.fn();
 
@@ -23,6 +23,7 @@ describe('Round1 Component', () => {
     render(
       <Round1
         onAnswer={mockOnAnswer}
+        shuffledIndexes={shuffledIndexes}
         gameItems={mockGameItems}
         currentItemIndex={0}
       />
@@ -45,6 +46,7 @@ describe('Round1 Component', () => {
     render(
       <Round1
         onAnswer={mockOnAnswer}
+        shuffledIndexes={shuffledIndexes}
         gameItems={mockGameItems}
         currentItemIndex={0}
       />
@@ -63,6 +65,7 @@ describe('Round1 Component', () => {
     render(
       <Round1
         onAnswer={mockOnAnswer}
+        shuffledIndexes={shuffledIndexes}
         gameItems={mockGameItems}
         currentItemIndex={mockGameItems.length}
       />

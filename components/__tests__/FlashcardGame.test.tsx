@@ -21,6 +21,7 @@ describe('FlashcardGame Component', () => {
         currentRound: 0,
         score: 0,
         hydratedGameItems: [],
+        shuffledIndexes: [],
         currentItemIndex: 0,
       },
       startGame: jest.fn(),
@@ -76,6 +77,7 @@ describe('FlashcardGame Component', () => {
         hydratedGameItems: products.filter((p) =>
           ['4011', '4012'].includes(p.plu)
         ),
+        shuffledIndexes: [0, 1],
         currentItemIndex: 0,
       },
       startGame: mockStartGame,
@@ -96,6 +98,7 @@ describe('FlashcardGame Component', () => {
         hydratedGameItems: products.filter((p) =>
           ['4011', '4012'].includes(p.plu)
         ),
+        shuffledIndexes: [0, 1],
         currentItemIndex: 0,
       },
       startGame: mockStartGame,
@@ -113,6 +116,7 @@ describe('FlashcardGame Component', () => {
         hydratedGameItems: products.filter((p) =>
           ['4011', '4012'].includes(p.plu)
         ),
+        shuffledIndexes: [0, 1],
         currentItemIndex: 0,
       },
       startGame: mockStartGame,
@@ -130,6 +134,7 @@ describe('FlashcardGame Component', () => {
         hydratedGameItems: products.filter((p) =>
           ['4011', '4012'].includes(p.plu)
         ),
+        shuffledIndexes: [0, 1],
         currentItemIndex: 0,
       },
       startGame: mockStartGame,
@@ -147,6 +152,7 @@ describe('FlashcardGame Component', () => {
         hydratedGameItems: products.filter((p) =>
           ['4011', '4012'].includes(p.plu)
         ),
+        shuffledIndexes: [0, 1],
         currentItemIndex: 0,
       },
       startGame: mockStartGame,
@@ -175,6 +181,7 @@ describe('FlashcardGame Component', () => {
         hydratedGameItems: products.filter((p) =>
           ['4011', '4012'].includes(p.plu)
         ),
+        shuffledIndexes: [0, 1],
         currentItemIndex: 0,
       },
       startGame: jest.fn(),
@@ -203,6 +210,7 @@ describe('FlashcardGame Component', () => {
         hydratedGameItems: products.filter((p) =>
           ['4011', '4012'].includes(p.plu)
         ),
+        shuffledIndexes: [0, 1],
         currentItemIndex: 0,
       },
       startGame: jest.fn(),
@@ -221,6 +229,7 @@ describe('FlashcardGame Component', () => {
         hydratedGameItems: products.filter((p) =>
           ['4011', '4012'].includes(p.plu)
         ),
+        shuffledIndexes: [0, 1],
         currentItemIndex: 0,
       },
       startGame: jest.fn(),

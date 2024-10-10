@@ -119,12 +119,12 @@ const Exporter = () => {
 
         {/* Export Buttons */}
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
-          <Grid item>
+          <Grid>
             <Button variant="contained" color="primary" onClick={exportAll}>
               Export All
             </Button>
           </Grid>
-          <Grid item>
+          <Grid>
             <Button
               variant="outlined"
               color="secondary"
@@ -139,7 +139,7 @@ const Exporter = () => {
         </Typography>
         {/* File Input for CSV Import */}
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
-          <Grid item>
+          <Grid>
             <input
               type="file"
               accept=".csv"
@@ -159,12 +159,12 @@ const Exporter = () => {
         </Typography>
         {/* Display Data Buttons */}
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
-          <Grid item>
+          <Grid>
             <Button variant="contained" color="info" onClick={handleDisplayAll}>
               Display All
             </Button>
           </Grid>
-          <Grid item>
+          <Grid>
             <Button
               variant="contained"
               color="info"

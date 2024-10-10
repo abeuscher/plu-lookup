@@ -8,6 +8,7 @@ import { toTitleCase } from '@/utils';
 const Round1: React.FC<RoundProps> = ({
   onAnswer,
   gameItems,
+  shuffledIndexes,
   currentItemIndex,
 }) => {
   if (
@@ -21,7 +22,7 @@ const Round1: React.FC<RoundProps> = ({
       </Container>
     );
   }
-  const currentItem = gameItems[currentItemIndex];
+  const currentItem = gameItems[shuffledIndexes[currentItemIndex]];
   if (!currentItem) {
     return null;
   }

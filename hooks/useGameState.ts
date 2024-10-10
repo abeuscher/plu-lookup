@@ -12,6 +12,7 @@ export const useGameState = () => {
     currentRound: getLocalStorage<number>('currentRound', 0) || 0,
     score: getLocalStorage<number>('score', 0) || 0,
     hydratedGameItems: getLocalStorage<Product[]>('hydratedGameItems', []) || [],
+    shuffledIndexes: getLocalStorage<number[]>('shuffledIndexes', []) || [],
     currentItemIndex: getLocalStorage<number>('currentItemIndex', 0) || 0,
     gameTime: getLocalStorage<number>('gameTime', 0) || 0,
     history: getLocalStorage<Turn[]>('hydratedGameItems', []) || [],
@@ -22,6 +23,7 @@ export const useGameState = () => {
     setLocalStorage('currentRound', gameState.currentRound);
     setLocalStorage('score', gameState.score);
     setLocalStorage('hydratedGameItems', gameState.hydratedGameItems);
+    setLocalStorage('shuffledIndexes', gameState.shuffledIndexes);
     setLocalStorage('currentItemIndex', gameState.currentItemIndex);
     setLocalStorage('gameTime', gameState.gameTime);
     setLocalStorage('history', gameState.history);
@@ -36,19 +38,27 @@ export const useGameState = () => {
     }));
   }, [selectedPLUs]);
 
-
+  const shuffledIndexes = useCallback(() => {
+    const shuffledIndexes = shuffleItems(Array.from(Array(gameState.hydratedGameItems.length).keys()));
+    setGameState(prevState => ({
+      ...prevState,
+      shuffledIndexes: shuffledIndexes
+    }));
+  }, [selectedPLUs]);
 
   const startGame = useCallback(() => {
     setGameState(prevState => ({
       ...prevState,
       currentRound: 1,
       score: 0,
+      shuffledIndexes: shuffleItems(Array.from(Array(prevState.hydratedGameItems.length).keys())),
       currentItemIndex: 0,
       gameTime: Date.now(),
       history: [],
       currentTurn: emptyTurn,
     }));
     hydrateGameItems();
+    shuffledIndexes();
   }, [hydrateGameItems]);
 
   const handleAnswer = useCallback(() => {
@@ -74,6 +84,7 @@ export const useGameState = () => {
         return {
           ...newState,
           hydratedGameItems: shuffleItems(prevState.hydratedGameItems),
+          shuffledIndexes: shuffleItems(Array.from(Array(prevState.hydratedGameItems.length).keys())),
           currentRound: newRound,
           currentItemIndex: 0,
           currentTurn: {
@@ -108,6 +119,7 @@ export const useGameState = () => {
       currentRound: 0,
       score: 0,
       hydratedGameItems: [],
+      shuffledIndexes: [],
       currentItemIndex: 0,
       gameTime: 0,
       history: [],
