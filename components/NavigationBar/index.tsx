@@ -34,7 +34,12 @@ function isActiveLink(currentPath, itemHref) {
   // Remove trailing slashes, if any
   const trimmedCurrentPath = normalizedCurrentPath.replace(/\/$/, '');
   const trimmedItemHref = normalizedItemHref.replace(/\/$/, '');
-
+  console.log(
+    'trimmedCurrentPath',
+    trimmedCurrentPath,
+    'trimmedItemHref',
+    trimmedItemHref
+  );
   // Compare the trimmed paths
   return trimmedCurrentPath === trimmedItemHref;
 }
