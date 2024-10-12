@@ -1,81 +1,4 @@
-// /styles/global.scss
-
-// Variables
-$primary-color: #035c06;
-$secondary-color: #0070f3;
-$accent-color: #ffcc00;
-$text-color: #000;
-
-// Background Gradient
-$gradient-start: #595555;
-$gradient-end: #351e18;
-$gradient-middle: #1d0555;
-
-// Reset
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-// Global Body Styling
-body {
-  font-family: 'Roboto', sans-serif;
-  background: linear-gradient(
-    120deg,
-    $gradient-start,
-    $gradient-middle,
-    $gradient-end
-  );
-  background-attachment: fixed;
-  background-size: cover;
-  color: $text-color;
-  line-height: 1.8;
-  min-height: 100vh;
-}
-main {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 0 0 2rem;
-  min-height: 50vh;
-}
-
-// Links Styling
-a {
-  color: $accent-color;
-  text-decoration: none;
-  font-weight: bold;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-// Headers Styling
-h1,
-h2,
-h3 {
-  margin-bottom: 1.5rem;
-  color: $primary-color;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
-}
-
-// General container styling
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-// Footer Styling
-footer {
-  padding: 1.5rem 0;
-  text-align: center;
-  background-color: rgba(0, 0, 0, 0.2);
-  color: $text-color;
-}
-#loom-companion-mv3 {
-  display: none;
-}
+// styles/custom-styles.scss
 
 @keyframes flip {
   0% {
@@ -88,14 +11,23 @@ footer {
     transform: rotateY(0deg);
   }
 }
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
 .active-link {
   color: white;
 }
+
 .game-round-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 2rem 0 1rem;
+
   .round-1-tile,
   .round-2-tile {
     height: 0;
@@ -106,11 +38,12 @@ footer {
     position: relative;
     perspective: 1000px;
     cursor: pointer;
-    background-color: #1976d2; // MUI default primary color
+    background-color: #1976d2;
     color: white;
     border: none;
     transform-style: preserve-3d;
     border-radius: 50% 50%;
+
     &:focus {
       animation: flip 0.45s ease-in-out forwards 1;
     }
@@ -143,16 +76,21 @@ footer {
     }
 
     &.correct::after {
-      content: '\2714'; // Unicode checkmark
-      color: #4caf50; // Green for correct answer
+      content: '\2714';
+      color: #4caf50;
     }
 
     &.incorrect::after {
-      content: '\2716'; // Unicode X mark
-      color: #f44336; // Red for incorrect answer
+      content: '\2716';
+      color: #f44336;
     }
   }
+
   .round-2-tile {
     font-size: 0.8rem;
   }
+}
+
+#loom-companion-mv3 {
+  display: none;
 }

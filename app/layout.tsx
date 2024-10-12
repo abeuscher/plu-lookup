@@ -15,7 +15,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeWrapper>
-          <div className="container">
+          <div className="wrapper">
             <NavigationBar />
             <main>{children}</main>
             <FooterBar />
