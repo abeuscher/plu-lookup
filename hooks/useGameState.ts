@@ -20,12 +20,17 @@ export const useGameState = () => {
   const { selectedPLUs } = usePlayerState();
   
   const [gameState, setGameState] = useState<GameState>(() => {
-    const storedState = localStorage.getItem('gameState');
-    return storedState ? JSON.parse(storedState) : INITIAL_GAME_STATE;
+    if (typeof window !== 'undefined') {
+      const storedState = localStorage.getItem('gameState');
+      return storedState ? JSON.parse(storedState) : INITIAL_GAME_STATE;
+    }
+    return INITIAL_GAME_STATE;
   });
 
   useEffect(() => {
-    localStorage.setItem('gameState', JSON.stringify(gameState));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('gameState', JSON.stringify(gameState));
+    }
   }, [gameState]);
 
   const startGame = useCallback(() => {
