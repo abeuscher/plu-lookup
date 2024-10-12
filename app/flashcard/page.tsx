@@ -6,7 +6,7 @@ import { StructuredData } from '@/components/StructuredData';
 export const metadata = generateMetadata('/flashcard');
 
 const FlashcardPage = () => {
-  const structuredData = getStructuredData('/voice-lookup');
+  const structuredData = getStructuredData('/flashcard');
   return (
     <>
       <StructuredData data={structuredData} />
