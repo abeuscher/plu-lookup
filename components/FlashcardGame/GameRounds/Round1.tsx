@@ -34,10 +34,10 @@ const Round1: React.FC<RoundProps> = ({
 
   return (
     <Container>
-      <Typography variant="h3" gutterBottom>
+      <Typography variant="h4" gutterBottom>
         {toTitleCase(currentItem.fullname)}{' '}
-        <span style={{ float: 'right' }}>
-          Item {currentItemIndex + 1} of {gameItems.length}
+        <span style={{ float: 'right', fontSize: '.8rem' }}>
+          Turn {currentItemIndex + 1} of {gameItems.length}
         </span>
       </Typography>
       <Grid container spacing={2}>
