@@ -19,7 +19,7 @@ export const StatusBar: React.FC<AppBarProps> = ({
   const { playerName } = usePlayerState();
 
   return (
-    <AppBar position="static" color="transparent">
+    <AppBar position="static" color="transparent" component="div">
       <Toolbar>
         <Typography
           variant="h5"

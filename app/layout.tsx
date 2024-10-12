@@ -4,6 +4,7 @@ import '@/styles/global.scss';
 
 import FooterBar from '@/components/FooterBar';
 import NavigationBar from '@/components/NavigationBar';
+import ThemeWrapper from '../components/ThemeWrapper';
 
 export default function RootLayout({
   children,
@@ -13,11 +14,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="container">
-          <NavigationBar />
-          <main>{children}</main>
-          <FooterBar />
-        </div>
+        <ThemeWrapper>
+          <div className="container">
+            <NavigationBar />
+            <main>{children}</main>
+            <FooterBar />
+          </div>
+        </ThemeWrapper>
       </body>
     </html>
   );
