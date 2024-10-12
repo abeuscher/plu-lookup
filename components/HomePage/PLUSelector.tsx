@@ -147,7 +147,7 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
                 size="small"
               />
             }
-            label="Selected Only"
+            label="Show Selected"
           />
           <Box flexGrow={1} />
           <Typography variant="body2" sx={{ mr: 2 }}>

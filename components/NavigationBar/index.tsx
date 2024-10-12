@@ -22,6 +22,7 @@ import { menuItems } from '@/data/nav';
 import { usePathname } from 'next/navigation';
 
 function isActiveLink(currentPath, itemHref) {
+  console.log('currentPath', currentPath, 'itemHref', itemHref);
   // Ensure both paths start with a slash
   const normalizedCurrentPath = currentPath.startsWith('/')
     ? currentPath
@@ -45,7 +46,7 @@ function NavigationBar() {
     const handleRouteChange = () => {
       setCurrentPath(pathname);
     };
-    console.log('nav change');
+    console.log('nav change', pathname);
     // Set initial path
     handleRouteChange();
   }, [pathname]);
