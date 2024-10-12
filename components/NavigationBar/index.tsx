@@ -13,131 +13,101 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
+import { Menu as MenuIcon, ShoppingCart } from '@mui/icons-material';
+import React, { useState } from 'react';
 
 import Link from 'next/link';
-import { Menu as MenuIcon } from '@mui/icons-material';
-import React from 'react';
-import { ShoppingCart } from '@mui/icons-material';
 import { menuItems } from '@/data/nav';
 import { usePathname } from 'next/navigation';
 
-function isActiveLink(currentPath, itemHref) {
-  console.log('currentPath', currentPath, 'itemHref', itemHref);
-  // Ensure both paths start with a slash
-  const normalizedCurrentPath = currentPath.startsWith('/')
-    ? currentPath
-    : `/${currentPath}`;
-  const normalizedItemHref = itemHref.startsWith('/')
-    ? itemHref
-    : `/${itemHref}`;
-
-  // Remove trailing slashes, if any
-  const trimmedCurrentPath = normalizedCurrentPath.replace(/\/$/, '');
-  const trimmedItemHref = normalizedItemHref.replace(/\/$/, '');
-  console.log(
-    'trimmedCurrentPath',
-    trimmedCurrentPath,
-    'trimmedItemHref',
-    trimmedItemHref
-  );
-  // Compare the trimmed paths
-  return trimmedCurrentPath === trimmedItemHref;
-}
-function NavigationBar() {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [currentPath, setCurrentPath] = React.useState('');
+const NavigationBar = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  React.useEffect(() => {
-    const handleRouteChange = () => {
-      setCurrentPath(pathname);
-    };
-    console.log('nav change', pathname);
-    // Set initial path
-    handleRouteChange();
-  }, [pathname]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const isActiveLink = (itemHref: string) => {
+    if (itemHref === '/') {
+      // For home page, only return true if pathname is exactly '/'
+      return pathname === '/';
+    } else {
+      // For other pages, check if pathname starts with itemHref
+      // and ensure it's an exact match or followed by a '/'
+      return (
+        pathname.startsWith(itemHref) &&
+        (pathname.length === itemHref.length ||
+          pathname[itemHref.length] === '/')
+      );
+    }
+  };
+
   const drawer = (
-    <div>
-      <List>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton
-              component={Link}
-              href={item.href}
-              aria-label={item.text}
-              selected={isActiveLink(currentPath, item.href)}
-              onClick={() => setMobileOpen(false)}
-            >
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </div>
+    <List>
+      {menuItems.map((item) => (
+        <ListItem key={item.text} disablePadding>
+          <ListItemButton
+            component={Link}
+            href={item.href}
+            selected={isActiveLink(item.href)}
+            onClick={() => setMobileOpen(false)}
+          >
+            <ListItemText primary={item.text} />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
   );
 
   return (
     <>
       <AppBar position="static">
         <Toolbar>
-          {/* Mobile Menu Icon */}
           <Hidden mdUp>
             <IconButton
               color="inherit"
               edge="start"
               onClick={handleDrawerToggle}
-              aria-label="open menu" // Add aria-label for accessibility
+              aria-label="open menu"
             >
               <MenuIcon />
             </IconButton>
           </Hidden>
           <Link
             href="/"
-            aria-label="home"
             style={{
               display: 'flex',
-              textDecoration: 'none',
               alignItems: 'center',
               flexGrow: 1,
+              textDecoration: 'none',
             }}
           >
-            <Icon color="inherit" style={{ width: '2em', height: '2em' }}>
-              {<ShoppingCart style={{ width: '2em', height: '2em' }} />}
+            <Icon color="inherit" sx={{ width: '2em', height: '2em', mr: 1 }}>
+              <ShoppingCart />
             </Icon>
-            {/* Site Title */}
             <Typography variant="h5" color="white">
               PLU Madness
             </Typography>
           </Link>
-
-          {/* Desktop Navigation */}
           <Hidden mdDown>
             {menuItems.map((item) => (
               <Link
                 key={item.text}
                 href={item.href}
-                aria-label={item.text}
-                style={{ textDecoration: 'none' }} // Remove default link styles
-                passHref
+                style={{ textDecoration: 'none' }}
               >
                 <Typography
                   component="span"
-                  className={
-                    isActiveLink(currentPath, item.href) ? 'active-link' : ''
-                  }
                   sx={{
-                    display: 'inline-block',
-                    padding: '6px 16px',
-                    backgroundColor: 'transparent',
-                    color: 'inherit',
-                    border: '1px solid transparent', // Add a border to mimic button if needed
-                    cursor: 'pointer',
+                    px: 2,
+                    py: 1,
+                    color: 'white',
+                    backgroundColor: isActiveLink(item.href)
+                      ? 'rgba(255, 255, 255, 0.2)'
+                      : 'transparent',
                     '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
                     },
                   }}
                 >
@@ -148,15 +118,13 @@ function NavigationBar() {
           </Hidden>
         </Toolbar>
       </AppBar>
-
-      {/* Mobile Drawer */}
       <Hidden mdUp>
         <Drawer
           anchor="left"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
         >
           {drawer}
@@ -164,6 +132,6 @@ function NavigationBar() {
       </Hidden>
     </>
   );
-}
+};
 
 export default NavigationBar;
