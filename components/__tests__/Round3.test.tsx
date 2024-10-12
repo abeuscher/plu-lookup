@@ -1,7 +1,6 @@
 import { Product, Turn } from '../../types';
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import React from 'react';
 import Round3 from '../FlashcardGame/GameRounds/Round3';
 
 describe('Round3 Component', () => {

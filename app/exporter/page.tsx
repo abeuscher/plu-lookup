@@ -1,7 +1,7 @@
-import { generateMetadata, getStructuredData } from '../../utils';
+import { generateMetadata, getStructuredData } from '@/utils';
 
-import Exporter from '../../components/Exporter';
-import { StructuredData } from '../layout';
+import Exporter from '@/components/Exporter';
+import { StructuredData } from '@/components/StructuredData';
 
 export const metadata = generateMetadata('/exporter');
 

@@ -3,7 +3,6 @@
 import { AppBar, Button, Toolbar, Typography } from '@mui/material';
 
 import { GameState } from '@/types';
-import React from 'react';
 import { usePlayerState } from '@/hooks/usePlayerState';
 
 interface AppBarProps {

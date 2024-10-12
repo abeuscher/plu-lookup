@@ -1,7 +1,7 @@
-import { generateMetadata, getStructuredData } from '../../utils';
+import { generateMetadata, getStructuredData } from '@/utils';
 
-import FlashcardGame from '../../components/FlashcardGame';
-import { StructuredData } from '../layout';
+import FlashcardGame from '@/components/FlashcardGame';
+import { StructuredData } from '@/components/StructuredData';
 
 export const metadata = generateMetadata('/flashcard');
 

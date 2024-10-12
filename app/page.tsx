@@ -1,8 +1,7 @@
 import { generateMetadata, getStructuredData } from '../utils/';
 
-import HomePage from '../components/HomePage';
-import React from 'react';
-import { StructuredData } from './layout';
+import HomePage from '@/components/HomePage';
+import { StructuredData } from '@/components/StructuredData';
 
 export const metadata = generateMetadata('/');
 

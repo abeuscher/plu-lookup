@@ -1,9 +1,9 @@
 'use client';
 
 import { AppBar, Container, Toolbar } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
-import React from 'react';
 import { menuItems } from '@/data/nav';
 import styles from './Footer.module.scss';
 
@@ -20,9 +20,9 @@ const footerData = {
 };
 
 function FooterBar() {
-  const [currentPath, setCurrentPath] = React.useState('');
+  const [currentPath, setCurrentPath] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPath(window.location.pathname); // Capture current path for link highlighting
   }, []);
 

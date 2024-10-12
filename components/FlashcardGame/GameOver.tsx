@@ -6,9 +6,8 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { GameState, Turn } from '@/types';
 
-import React from 'react';
+import { GameState } from '@/types';
 
 interface GameOverProps {
   gameState: GameState;

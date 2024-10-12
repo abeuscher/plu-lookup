@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import FlashcardGame from '../FlashcardGame/index';
-import React from 'react';
 import { products } from '../../data/products';
 import { useGameState } from '../../hooks/useGameState';
 import { usePlayerState } from '../../hooks/usePlayerState';

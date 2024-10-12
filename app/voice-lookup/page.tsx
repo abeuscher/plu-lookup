@@ -1,7 +1,7 @@
-import { generateMetadata, getStructuredData } from '../../utils';
+import { generateMetadata, getStructuredData } from '@/utils';
 
-import ProductSearch from '../../components/ProductSearch';
-import { StructuredData } from '../layout';
+import ProductSearch from '@/components/ProductSearch';
+import { StructuredData } from '@/components/StructuredData';
 
 export const metadata = generateMetadata('/voice-lookup');
 

@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import React from 'react';
 import Round1 from '../FlashcardGame/GameRounds/Round1';
 import { toTitleCase } from '@/utils';
 
