@@ -2,8 +2,8 @@
 
 import {
   AppBar,
+  Box,
   Drawer,
-  Hidden,
   Icon,
   IconButton,
   List,
@@ -30,11 +30,8 @@ const NavigationBar = () => {
 
   const isActiveLink = (itemHref: string) => {
     if (itemHref === '/') {
-      // For home page, only return true if pathname is exactly '/'
       return pathname === '/';
     } else {
-      // For other pages, check if pathname starts with itemHref
-      // and ensure it's an exact match or followed by a '/'
       return (
         pathname.startsWith(itemHref) &&
         (pathname.length === itemHref.length ||
@@ -64,16 +61,17 @@ const NavigationBar = () => {
     <>
       <AppBar position="static">
         <Toolbar>
-          <Hidden mdUp>
-            <IconButton
-              color="inherit"
-              edge="start"
-              onClick={handleDrawerToggle}
-              aria-label="open menu"
-            >
-              <MenuIcon />
-            </IconButton>
-          </Hidden>
+          <IconButton
+            color="inherit"
+            edge="start"
+            onClick={handleDrawerToggle}
+            aria-label="open menu"
+            sx={{
+              display: { md: 'none' },
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
           <Link
             href="/"
             style={{
@@ -90,46 +88,39 @@ const NavigationBar = () => {
               PLU Madness
             </Typography>
           </Link>
-          <Hidden mdDown>
+          <Box sx={{ display: { xs: 'none', md: 'block' } }}>
             {menuItems.map((item) => (
               <Link
                 key={item.text}
                 href={item.href}
                 style={{ textDecoration: 'none' }}
+                className={isActiveLink(item.href) ? 'active-link' : ''}
               >
                 <Typography
                   component="span"
                   sx={{
                     px: 2,
                     py: 1,
-                    color: 'white',
-                    backgroundColor: isActiveLink(item.href)
-                      ? 'rgba(255, 255, 255, 0.2)'
-                      : 'transparent',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    },
                   }}
                 >
                   {item.text}
                 </Typography>
               </Link>
             ))}
-          </Hidden>
+          </Box>
         </Toolbar>
       </AppBar>
-      <Hidden mdUp>
-        <Drawer
-          anchor="left"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true,
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </Hidden>
+      <Drawer
+        anchor="left"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        sx={{ display: { md: 'none' } }}
+      >
+        {drawer}
+      </Drawer>
     </>
   );
 };

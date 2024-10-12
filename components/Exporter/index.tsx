@@ -67,7 +67,6 @@ const Exporter = () => {
           setImportSuccess(importedPLUs.length);
         },
         error: (error) => {
-          console.error('Error parsing CSV file:', error);
           setImportSuccess(null); // In case of error
         },
       });
