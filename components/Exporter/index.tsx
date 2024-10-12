@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Box,
   Button,
@@ -13,13 +15,13 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
 
 import Papa from 'papaparse'; // For parsing CSV files
 import { parse } from 'json2csv';
 import { products } from '@/data/products'; // assuming the products data is imported from here
 import { saveAs } from 'file-saver';
 import { usePlayerState } from '@/hooks/usePlayerState'; // Manage selectedPLUs
+import { useState } from 'react';
 
 const Exporter = () => {
   const { selectedPLUs, setSelectedPLUs } = usePlayerState(); // Manage selectedPLUs

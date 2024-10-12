@@ -1,16 +1,18 @@
-'use client';
+import { generateMetadata, getStructuredData } from '../../utils';
 
 import FlashcardGame from '../../components/FlashcardGame';
-import { useAuthCheck } from '../../utils/';
+import { StructuredData } from '../layout';
+
+export const metadata = generateMetadata('/flashcard');
 
 const FlashcardPage = () => {
-  const { isAuthenticated } = useAuthCheck();
-
-  if (!isAuthenticated) {
-    return null;
-  }
-
-  return <FlashcardGame />;
+  const structuredData = getStructuredData('/voice-lookup');
+  return (
+    <>
+      <StructuredData data={structuredData} />
+      <FlashcardGame />
+    </>
+  );
 };
 
 export default FlashcardPage;

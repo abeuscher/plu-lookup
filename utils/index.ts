@@ -1,19 +1,5 @@
-import { useEffect } from 'react';
-import { usePlayerState } from '../hooks/usePlayerState';
-import { useRouter } from 'next/navigation';
-
-export const useAuthCheck = () => {
-  const router = useRouter();
-  const { playerName, selectedPLUs } = usePlayerState();
-
-  useEffect(() => {
-    if (!playerName || selectedPLUs.length === 0) {
-      router.push('/');
-    }
-  }, [playerName, selectedPLUs, router]);
-
-  return { isAuthenticated: !!playerName && selectedPLUs.length > 0 };
-};
+import { Metadata } from 'next'
+import { getMetadata } from '../data/metadata';
 
 export const shuffleItems = <T>(array: T[]): T[] => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -58,4 +44,19 @@ export const emptyTurn = {
   playerGuess: null,
   correctAnswer: null,
   isCorrect: null,
+}
+
+export function generateMetadata(path: string): Metadata {
+  const pageMetadata = getMetadata(path)
+  
+  return {
+    title: pageMetadata.title,
+    description: pageMetadata.description,
+    keywords: pageMetadata.keywords,
+  }
+}
+
+export function getStructuredData(path: string): object {
+  const pageMetadata = getMetadata(path)
+  return pageMetadata.structuredData
 }
