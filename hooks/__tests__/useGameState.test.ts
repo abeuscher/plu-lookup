@@ -88,17 +88,39 @@ describe('useGameState Hook', () => {
       result.current.startGame();
     });
 
-    const turns: Turn[] = [
-      { round: 3, playerGuess: '4011', correctAnswer: '4011', isCorrect: true },
+    // Simulate scoring in Round 1 and 2
+    act(() => {
+      result.current.gameState.currentTurn = {
+        round: 1,
+        playerGuess: '3018',
+        correctAnswer: '3018',
+        isCorrect: true,
+      };
+      result.current.handleAnswer();
+    });
+
+    act(() => {
+      result.current.gameState.currentTurn = {
+        round: 2,
+        playerGuess: '3019',
+        correctAnswer: '3019',
+        isCorrect: true,
+      };
+      result.current.handleAnswer();
+    });
+
+    const round3Turns: Turn[] = [
+      { round: 3, playerGuess: '3018', correctAnswer: '3018', isCorrect: true },
       { round: 3, playerGuess: '3019', correctAnswer: '3019', isCorrect: true },
     ];
 
     act(() => {
-      result.current.calculateFinalScore(turns);
+      result.current.calculateFinalScore(round3Turns);
     });
 
-    expect(result.current.gameState.score).toBe(2);
+    expect(result.current.gameState.score).toBe(4); // 2 from previous rounds + 2 from Round 3
     expect(result.current.gameState.currentRound).toBe(4);
+    expect(result.current.gameState.history.length).toBe(4); // 2 from previous rounds + 2 from Round 3
   });
 
   it('should reset the game state', () => {
@@ -109,12 +131,13 @@ describe('useGameState Hook', () => {
     });
 
     act(() => {
-      result.current.handleAnswer({
+      result.current.gameState.currentTurn = {
         round: 1,
         playerGuess: 'Pears',
         correctAnswer: 'Pears',
         isCorrect: true,
-      });
+      }
+      result.current.handleAnswer();
     });
 
     act(() => {

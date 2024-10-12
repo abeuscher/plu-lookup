@@ -1,33 +1,32 @@
 import { GameState, Product, Turn } from '../types';
-import { emptyTurn, getLocalStorage, setLocalStorage, shuffleItems } from '../utils/';
+import { emptyTurn, shuffleItems } from '../utils/';
 import { useCallback, useEffect, useState } from 'react';
 
 import { products } from '../data/products';
 import { usePlayerState } from './usePlayerState';
 
+const INITIAL_GAME_STATE: GameState = {
+  currentRound: 0,
+  score: 0,
+  hydratedGameItems: [],
+  shuffledIndexes: [],
+  currentItemIndex: 0,
+  gameTime: 0,
+  history: [],
+  currentTurn: emptyTurn,
+};
+
 export const useGameState = () => {
   const { selectedPLUs } = usePlayerState();
   
-  const [gameState, setGameState] = useState<GameState>(() => ({
-    currentRound: getLocalStorage<number>('currentRound', 0) || 0,
-    score: getLocalStorage<number>('score', 0) || 0,
-    hydratedGameItems: getLocalStorage<Product[]>('hydratedGameItems', []) || [],
-    shuffledIndexes: getLocalStorage<number[]>('shuffledIndexes', []) || [],
-    currentItemIndex: getLocalStorage<number>('currentItemIndex', 0) || 0,
-    gameTime: getLocalStorage<number>('gameTime', 0) || 0,
-    history: getLocalStorage<Turn[]>('hydratedGameItems', []) || [],
-    currentTurn: getLocalStorage<Turn>('currentTurn', emptyTurn) || emptyTurn
-  }));
+  const [gameState, setGameState] = useState<GameState>(() => {
+    const storedState = localStorage.getItem('gameState');
+    return storedState ? JSON.parse(storedState) : INITIAL_GAME_STATE;
+  });
 
   useEffect(() => {
-    setLocalStorage('currentRound', gameState.currentRound);
-    setLocalStorage('score', gameState.score);
-    setLocalStorage('hydratedGameItems', gameState.hydratedGameItems);
-    setLocalStorage('shuffledIndexes', gameState.shuffledIndexes);
-    setLocalStorage('currentItemIndex', gameState.currentItemIndex);
-    setLocalStorage('gameTime', gameState.gameTime);
-    setLocalStorage('history', gameState.history);
-    setLocalStorage('currentTurn', gameState.currentTurn);
+    console.log('Game state updated');
+    localStorage.setItem('gameState', JSON.stringify(gameState));
   }, [gameState]);
 
   const hydrateGameItems = useCallback(() => {
@@ -38,32 +37,21 @@ export const useGameState = () => {
     }));
   }, [selectedPLUs]);
 
-  const shuffledIndexes = useCallback(() => {
-    const shuffledIndexes = shuffleItems(Array.from(Array(gameState.hydratedGameItems.length).keys()));
-    setGameState(prevState => ({
-      ...prevState,
-      shuffledIndexes: shuffledIndexes
-    }));
-  }, [selectedPLUs]);
-
   const startGame = useCallback(() => {
-    setGameState(prevState => ({
-      ...prevState,
+    const hydratedItems = products.filter(product => selectedPLUs.includes(product.plu));
+    const shuffledItems = shuffleItems(hydratedItems);
+    setGameState({
+      ...INITIAL_GAME_STATE,
       currentRound: 1,
-      score: 0,
-      shuffledIndexes: shuffleItems(Array.from(Array(prevState.hydratedGameItems.length).keys())),
-      currentItemIndex: 0,
+      hydratedGameItems: shuffledItems,
+      shuffledIndexes: shuffleItems(Array.from(Array(shuffledItems.length).keys())),
       gameTime: Date.now(),
-      history: [],
-      currentTurn: emptyTurn,
-    }));
-    hydrateGameItems();
-    shuffledIndexes();
-  }, [hydrateGameItems]);
+    });
+  }, [selectedPLUs]);
 
   const handleAnswer = useCallback(() => {
     setGameState(prevState => {
-      const newScore = prevState.score + (prevState.currentTurn.isCorrect ? 1 : 0);
+      const newScore = prevState.score + (prevState.currentTurn?.isCorrect ? 1 : 0);
       const newItemIndex = prevState.currentItemIndex + 1;
       
       const newState = {
@@ -71,12 +59,7 @@ export const useGameState = () => {
         score: newScore,
         currentItemIndex: newItemIndex,
         history: [...prevState.history, prevState.currentTurn],
-        currentTurn: {
-          round: prevState.currentRound,
-          playerGuess: null,
-          correctAnswer: null,
-          isCorrect: null,
-        },
+        currentTurn: emptyTurn,
       };
   
       if (newItemIndex >= prevState.hydratedGameItems.length) {
@@ -87,12 +70,6 @@ export const useGameState = () => {
           shuffledIndexes: shuffleItems(Array.from(Array(prevState.hydratedGameItems.length).keys())),
           currentRound: newRound,
           currentItemIndex: 0,
-          currentTurn: {
-            round: newRound,
-            playerGuess: null,
-            correctAnswer: null,
-            isCorrect: null,
-          },
         };
       } else {
         return newState;
@@ -100,31 +77,18 @@ export const useGameState = () => {
     });
   }, []);
 
-  const calculateFinalScore = useCallback((turns: Turn[]) => {
-  
-    const finalScore = turns.reduce((score, turn) => {
-      return score + (turn.isCorrect ? 1 : 0);
-    }, 0);
-  
+  const calculateFinalScore = useCallback((round3Turns: Turn[]) => {
     setGameState(prevState => ({
       ...prevState,
-      score: finalScore,
+      score: prevState.score + round3Turns.reduce((score, turn) => score + (turn.isCorrect ? 1 : 0), 0),
       currentRound: 4,
-      gameTime: Date.now() - prevState.gameTime, // Calculate total game time
+      gameTime: Date.now() - prevState.gameTime,
+      history: [...prevState.history, ...round3Turns],
     }));
   }, []);
 
   const resetGame = useCallback(() => {
-    setGameState({
-      currentRound: 0,
-      score: 0,
-      hydratedGameItems: [],
-      shuffledIndexes: [],
-      currentItemIndex: 0,
-      gameTime: 0,
-      history: [],
-      currentTurn: emptyTurn,
-    });
+    setGameState(INITIAL_GAME_STATE);
   }, []);
 
   return {
@@ -133,6 +97,5 @@ export const useGameState = () => {
     handleAnswer,
     calculateFinalScore,
     resetGame,
-    shuffleItems
   };
 };

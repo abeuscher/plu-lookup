@@ -68,7 +68,7 @@ const FlashcardGame: React.FC = () => {
           />
         );
       case 4:
-        return <GameOver score={gameState.score} onRestart={resetGame} />;
+        return <GameOver gameState={gameState} onRestart={resetGame} />;
       default:
         return null;
     }
