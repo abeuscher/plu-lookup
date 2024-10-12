@@ -1,4 +1,4 @@
-import { GameState, Product, Turn } from '../types';
+import { GameState, Turn } from '../types';
 import { emptyTurn, shuffleItems } from '../utils/';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -28,14 +28,6 @@ export const useGameState = () => {
     console.log('Game state updated');
     localStorage.setItem('gameState', JSON.stringify(gameState));
   }, [gameState]);
-
-  const hydrateGameItems = useCallback(() => {
-    const hydratedItems = products.filter(product => selectedPLUs.includes(product.plu));
-    setGameState(prevState => ({
-      ...prevState,
-      hydratedGameItems: shuffleItems(hydratedItems)
-    }));
-  }, [selectedPLUs]);
 
   const startGame = useCallback(() => {
     const hydratedItems = products.filter(product => selectedPLUs.includes(product.plu));

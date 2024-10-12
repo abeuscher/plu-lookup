@@ -85,7 +85,7 @@ const HomePage: React.FC = () => {
         {/* Blurb */}
         <Typography variant="h6">
           Select the set of PLUs you'd like to work with, memorize, or export.
-          The dropdown has a list of presets which we are working to grow.
+          The dropdown has a list of a few presets.
         </Typography>
       </Box>
 
