@@ -7,7 +7,7 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  Grid,
+  Grid2 as Grid,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -217,7 +217,10 @@ const PLUSelector: React.FC<PLUSelectorProps> = ({
             <AccordionDetails>
               <Grid container spacing={2}>
                 {productsByCategory[category].map((product) => (
-                  <Grid item key={product.plu} xs={12} sm={6} md={4} lg={3}>
+                  <Grid
+                    key={product.plu}
+                    size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                  >
                     <FormControlLabel
                       control={
                         <Checkbox

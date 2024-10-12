@@ -7,18 +7,6 @@ import Link from 'next/link';
 import { menuItems } from '@/data/nav';
 import styles from './Footer.module.scss';
 
-const footerData = {
-  title: 'PLU Madness',
-  copyrightYear: new Date().getFullYear(),
-  contactEmail: 'info@example.com',
-  mailingAddress: '123 Widget St, Widget City, WD 45678',
-  phoneNumbers: [
-    { label: 'Main Office', number: '+1234567890' },
-    { label: 'Support', number: '+0987654321' },
-  ],
-  menuItems: menuItems,
-};
-
 function FooterBar() {
   const [currentPath, setCurrentPath] = useState('');
 
@@ -37,7 +25,7 @@ function FooterBar() {
         <Toolbar className={styles.toolbar}>
           {/* Footer Navigation */}
           <div className={styles.menuList}>
-            {footerData.menuItems.map((item) => (
+            {menuItems.map((item) => (
               <Link
                 href={item.href}
                 key={item.text}

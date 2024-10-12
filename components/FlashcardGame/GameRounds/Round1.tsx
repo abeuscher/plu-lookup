@@ -34,14 +34,11 @@ const Round1: React.FC<RoundProps> = ({
 
   return (
     <Container>
-      <Typography variant="body1" gutterBottom>
-        Round 1
+      <Typography variant="h3" gutterBottom>
+        {toTitleCase(currentItem.fullname)}{' '}
         <span style={{ float: 'right' }}>
           Item {currentItemIndex + 1} of {gameItems.length}
         </span>
-      </Typography>
-      <Typography variant="h3" gutterBottom>
-        {toTitleCase(currentItem.fullname)}
       </Typography>
       <Grid container spacing={2}>
         {gameItems.map((item) => (
