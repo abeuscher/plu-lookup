@@ -92,7 +92,6 @@ const ProductSearch: React.FC = () => {
         ][0].transcript
           .toLowerCase()
           .trim();
-        console.log('Speech recognition result:', speechResult);
 
         if (commands.includes(speechResult)) {
           handleVoiceCommand(speechResult);
@@ -109,7 +108,6 @@ const ProductSearch: React.FC = () => {
       };
 
       recognitionRef.current.onend = () => {
-        console.log('Speech recognition ended');
         if (isListening && !isSpeaking) {
           recognitionRef.current?.start();
         }

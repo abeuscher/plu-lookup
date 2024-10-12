@@ -2,7 +2,6 @@
 
 import { Container, Typography } from '@mui/material';
 
-import { AppBar } from '../shared/AppBar';
 import GameOver from './GameOver';
 import { Guess } from '@/types';
 import Link from 'next/link';
@@ -10,6 +9,7 @@ import Round0 from './GameRounds/Round0';
 import Round1 from './GameRounds/Round1';
 import Round2 from './GameRounds/Round2';
 import Round3 from './GameRounds/Round3';
+import { StatusBar } from './StatusBar';
 import { useGameState } from '@/hooks/useGameState';
 import { usePlayerState } from '@/hooks/usePlayerState';
 
@@ -77,7 +77,7 @@ const FlashcardGame: React.FC = () => {
   if (!playerName || selectedPLUs.length === 0) {
     return (
       <div>
-        <AppBar
+        <StatusBar
           title="Flashcard Game"
           gameState={gameState}
           onRestartGame={handleRestartGame}
@@ -96,8 +96,8 @@ const FlashcardGame: React.FC = () => {
 
   return (
     <>
-      <AppBar
-        title={`Flashcard Game - Round ${gameState.currentRound}`}
+      <StatusBar
+        title={`Flashcard Game`}
         gameState={gameState}
         onRestartGame={handleRestartGame}
       />

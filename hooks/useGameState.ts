@@ -25,7 +25,6 @@ export const useGameState = () => {
   });
 
   useEffect(() => {
-    console.log('Game state updated');
     localStorage.setItem('gameState', JSON.stringify(gameState));
   }, [gameState]);
 

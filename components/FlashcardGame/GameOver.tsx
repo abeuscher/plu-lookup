@@ -16,7 +16,6 @@ interface GameOverProps {
 }
 
 const GameOver: React.FC<GameOverProps> = ({ gameState, onRestart }) => {
-  console.log(gameState);
   const renderRoundRecap = (roundNumber: number) => {
     const roundTurns = gameState.history.filter(
       (turn) => turn.round === roundNumber

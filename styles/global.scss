@@ -84,13 +84,14 @@ footer {
   justify-content: space-between;
   align-items: center;
   margin: 2rem 0 1rem;
+  .round-1-tile {
+    aspect-ratio: 1/1;
+    font-size: 3rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+  }
 }
-.round-1-tile {
-  aspect-ratio: 1/1;
-  font-size: 3rem;
-  font-family: 'Courier New', Courier, monospace;
-  font-weight: bold;
-}
+
 // Add this to your global.scss file or create a new SCSS file for Round1 component
 
 @keyframes flip {
@@ -107,8 +108,9 @@ footer {
 
 .round-1-tile,
 .round-2-tile {
-  aspect-ratio: 1/1;
-  font-size: 3rem;
+  height: 0;
+  padding: 50% 10%;
+  font-size: 2rem;
   font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
   position: relative;
@@ -118,7 +120,7 @@ footer {
   color: white;
   border: none;
   transform-style: preserve-3d;
-
+  border-radius: 50% 50%;
   &:focus {
     animation: flip 0.45s ease-in-out forwards 1;
   }
@@ -126,6 +128,8 @@ footer {
   &::after {
     content: '';
     position: absolute;
+    border-radius: 50% 50%;
+    background-color: antiquewhite;
     top: 0;
     left: 0;
     right: 0;
@@ -159,5 +163,5 @@ footer {
   }
 }
 .round-2-tile {
-  font-size: 1rem;
+  font-size: 0.8rem;
 }

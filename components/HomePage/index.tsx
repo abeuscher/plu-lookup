@@ -4,18 +4,13 @@ import {
   Box,
   Button,
   Container,
-  FormControl,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
-  SelectChangeEvent,
   TextField,
   Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import PLUSelector from '../shared/PLUSelector';
+import PLUSelector from './PLUSelector';
 import { defaultGroups } from '@/data/products';
 import { usePlayerState } from '@/hooks/usePlayerState';
 
@@ -23,7 +18,7 @@ const HomePage: React.FC = () => {
   const { playerName, setPlayerName, selectedPLUs, setSelectedPLUs } =
     usePlayerState();
   const [isClient, setIsClient] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState('');
+  const [selectedGroup, setSelectedGroup] = useState('None');
   const [isSetupComplete, setIsSetupComplete] = useState(false);
 
   useEffect(() => {
@@ -37,27 +32,8 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const handleGroupSelection = (event: SelectChangeEvent<string>) => {
-    const groupName = event.target.value as string;
+  const handleGroupChange = (groupName: string) => {
     setSelectedGroup(groupName);
-
-    if (groupName === 'None') {
-      setSelectedPLUs([]);
-      return;
-    }
-
-    const group = defaultGroups.find((g) => g.groupName === groupName);
-    if (group) {
-      const pluStrings = group.values.map((plu) => plu.toString());
-      setSelectedPLUs(pluStrings);
-    }
-  };
-
-  const handlePLUSelectionChange = (newSelectedPLUs: string[]) => {
-    setSelectedPLUs(newSelectedPLUs);
-    if (newSelectedPLUs.length === 0) {
-      setSelectedGroup('None');
-    }
   };
 
   if (!isClient) {
@@ -100,31 +76,16 @@ const HomePage: React.FC = () => {
               margin="normal"
               required
             />
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="group-select-label">
-                Select Default Group
-              </InputLabel>
-              <Select
-                labelId="group-select-label"
-                value={selectedGroup}
-                onChange={handleGroupSelection}
-                label="Select Default Group"
-              >
-                <MenuItem value="None">None</MenuItem>
-                {defaultGroups.map((group) => (
-                  <MenuItem key={group.groupName} value={group.groupName}>
-                    {group.groupName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
             <Box my={2}>
               <Typography variant="h6" gutterBottom>
                 Select PLUs for your games and lookups:
               </Typography>
               <PLUSelector
                 selectedPLUs={selectedPLUs}
-                onSelectionChange={handlePLUSelectionChange}
+                onSelectionChange={setSelectedPLUs}
+                defaultGroups={defaultGroups}
+                selectedGroup={selectedGroup}
+                onGroupChange={handleGroupChange}
               />
             </Box>
             <Button

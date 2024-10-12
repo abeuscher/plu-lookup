@@ -49,7 +49,7 @@ const Round2: React.FC<RoundProps> = ({
       </Typography>
       <Grid container spacing={2}>
         {gameItems.map((item) => (
-          <Grid key={item.fullname} size={{ xs: 3 }}>
+          <Grid key={item.plu} size={{ xs: 6, sm: 4, md: 3 }}>
             <Button
               className={`round-2-tile  ${item.plu === currentItem.plu ? 'correct' : 'incorrect'}`}
               variant="contained"

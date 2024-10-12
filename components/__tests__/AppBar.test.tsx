@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { AppBar } from '../shared/AppBar';
+import { AppBar } from '../FlashcardGame/StatusBar';
 import { usePlayerState } from '../../hooks/usePlayerState';
 
 // Mock the usePlayerState hook

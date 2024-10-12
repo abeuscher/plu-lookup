@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  Button,
-  AppBar as MuiAppBar,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { AppBar, Button, Toolbar, Typography } from '@mui/material';
 
 import { GameState } from '@/types';
 import React from 'react';
@@ -17,7 +12,7 @@ interface AppBarProps {
   onRestartGame: () => void;
 }
 
-export const AppBar: React.FC<AppBarProps> = ({
+export const StatusBar: React.FC<AppBarProps> = ({
   title,
   gameState,
   onRestartGame,
@@ -25,17 +20,22 @@ export const AppBar: React.FC<AppBarProps> = ({
   const { playerName } = usePlayerState();
 
   return (
-    <MuiAppBar position="static" color="transparent">
+    <AppBar position="static" color="transparent">
       <Toolbar>
-        <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{ flexGrow: 1, display: { xs: 'none', md: 'block' } }}
+        >
           {title}
         </Typography>
-        <Typography variant="body1" style={{ marginRight: 16 }}>
-          Player: {playerName}
-        </Typography>
+        <Typography variant="body1">Player: {playerName}</Typography>
         {gameState && gameState.currentRound > 0 && (
           <>
-            <Typography variant="body1" style={{ marginRight: 12 }}>
+            <Typography
+              variant="body1"
+              style={{ marginRight: 12, marginLeft: 12 }}
+            >
               Round {gameState.currentRound}
             </Typography>
             <Typography variant="body1" style={{ marginRight: 12 }}>
@@ -54,6 +54,6 @@ export const AppBar: React.FC<AppBarProps> = ({
           </>
         )}
       </Toolbar>
-    </MuiAppBar>
+    </AppBar>
   );
 };

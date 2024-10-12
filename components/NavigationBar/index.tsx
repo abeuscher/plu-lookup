@@ -45,7 +45,7 @@ function NavigationBar() {
     const handleRouteChange = () => {
       setCurrentPath(pathname);
     };
-
+    console.log('nav change');
     // Set initial path
     handleRouteChange();
   }, [pathname]);
